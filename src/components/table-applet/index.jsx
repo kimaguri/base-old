@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import {
     Box,
@@ -19,13 +19,50 @@ import { createColumns } from './utils.js'
 import { FiSearch } from 'react-icons/fi'
 import { FaPlus } from 'react-icons/fa6'
 import { IconButtonStyled } from './style.js'
+import { IndeterminateCheckbox } from './indeterminate-checkbox/index.jsx'
 
-export const TableApplet = ({ columns, data, variant = 'striped' }) => {
-    const columnsArray = useMemo(() => createColumns(columns), [columns])
+export const TableApplet = ({ columns, data, variant = 'simple' }) => {
+    const [rowSelection, setRowSelection] = useState({})
+
+    const columnsArray = useMemo(
+        () => [
+            {
+                id: 'select',
+                header: ({ table }) => (
+                    <IndeterminateCheckbox
+                        {...{
+                            isChecked: table.getIsAllRowsSelected(),
+                            indeterminate: table.getIsSomeRowsSelected(),
+                            onChange: table.getToggleAllRowsSelectedHandler()
+                        }}
+                    />
+                ),
+                cell: ({ row }) => (
+                    <IndeterminateCheckbox
+                        {...{
+                            isChecked: row.getIsSelected(),
+                            disabled: !row.getCanSelect(),
+                            indeterminate: row.getIsSomeSelected(),
+                            onChange: row.getToggleSelectedHandler()
+                        }}
+                    />
+                )
+            },
+            ...createColumns(columns)
+        ],
+        [columns]
+    )
+
     const tableInstance = useReactTable({
         columns: columnsArray,
         data,
-        getCoreRowModel: getCoreRowModel()
+        getCoreRowModel: getCoreRowModel(),
+        enableRowSelection: true,
+        enableMultiRowSelection: true,
+        state: {
+            rowSelection
+        },
+        onRowSelectionChange: setRowSelection
     })
 
     return (

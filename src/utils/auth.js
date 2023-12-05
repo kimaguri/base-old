@@ -22,10 +22,12 @@ export const apiRequest = {
         try {
             const response = await fetch(`${apiSettings.baseUrl}${endpoint}`, requestOptions)
             await this.handleTokenExpiration(response)
+
             return response
         } catch (error) {
             if (retries > 0 && this.isIdempotentMethod(method)) {
                 console.warn('Request failed, retrying...', error)
+
                 return this.request(endpoint, method, { body, headers, retries: retries - 1 })
             }
             console.error('API request failed', error)
@@ -50,19 +52,24 @@ export const apiRequest = {
             Accept: 'application/json',
             ...customHeaders
         }
+
         if (userToken) {
             baseHeaders['Authorization'] = `Bearer ${userToken}`
         }
+
         return baseHeaders
     },
     async handleTokenExpiration(response) {
         if (response.status === 401) {
             const refreshToken = localStorage.getItem('refreshToken')
+
             if (refreshToken) {
                 await this.refreshToken(refreshToken)
+
                 return true
             }
         }
+
         return false
     },
     async refreshToken(refreshToken) {
@@ -89,6 +96,7 @@ export const apiRequest = {
     getTimeoutSignal(timeout) {
         const controller = new AbortController()
         setTimeout(() => controller.abort(), timeout)
+
         return controller.signal
     },
     isIdempotentMethod(method) {
