@@ -21,7 +21,7 @@ import { FaPlus } from 'react-icons/fa6'
 import { IconButtonStyled } from './style.js'
 import { IndeterminateCheckbox } from './indeterminate-checkbox/index.jsx'
 
-export const TableApplet = ({ columns, data, variant = 'simple' }) => {
+export const TableApplet = ({ columns, data, variant = 'simple', onAddRecord }) => {
     const [rowSelection, setRowSelection] = useState({})
 
     const columnsArray = useMemo(
@@ -80,7 +80,12 @@ export const TableApplet = ({ columns, data, variant = 'simple' }) => {
                         </InputLeftElement>
                         <Input type="text" placeholder="Поиск" size="lg" />
                     </InputGroup>
-                    <IconButtonStyled aria-label={'Add record'} icon={<FaPlus />} isRound />
+                    <IconButtonStyled
+                        aria-label={'Add record'}
+                        icon={<FaPlus />}
+                        isRound
+                        onClick={onAddRecord}
+                    />
                 </Box>
                 <Table variant={variant}>
                     <Thead>

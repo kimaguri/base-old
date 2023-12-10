@@ -2,7 +2,7 @@ import { TableApplet } from '../../components/table-applet/index.jsx'
 import Plate from '../../components/plate/index.jsx'
 import { meta } from './meta'
 
-export const ObjectsPage = () => {
+export const DummyPage = () => {
     const data = [
         {
             firstName: 'Alice',
