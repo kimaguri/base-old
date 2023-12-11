@@ -12,6 +12,7 @@ import {
     ModalOverlay
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+import { SelectInput } from '../../../../components/form/components/select-input/index.jsx'
 
 function MyModal({ isOpen, onClose, onSubmit }) {
     const {
@@ -35,11 +36,7 @@ function MyModal({ isOpen, onClose, onSubmit }) {
                     <ModalBody>
                         <FormControl isRequired>
                             <FormLabel htmlFor="project_id">Project ID</FormLabel>
-                            <Input
-                                id="project_id"
-                                size="lg"
-                                {...register('project_id', { required: true })}
-                            />
+                            <SelectInput name="project_id" size="lg" register={register} />
                             {errors.project_id && <span>This field is required</span>}
                         </FormControl>
 
