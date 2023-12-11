@@ -9,16 +9,16 @@ import { Box, Flex } from '@chakra-ui/react'
 
 const menuMeta = [
     {
-        key: 'objects',
-        title: 'Объекты',
+        key: 'projects',
+        title: 'Проекты',
         icon: FaAddressBook,
-        route: '/objects'
+        route: '/projects'
     },
     {
-        key: 'contacts',
-        title: 'Контакты',
+        key: 'tablo',
+        title: 'Табель',
         icon: FaBrush,
-        route: '/contacts'
+        route: '/tablo'
     },
     {
         key: 'settings',

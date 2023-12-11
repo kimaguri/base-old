@@ -8,19 +8,17 @@ const supabaseAnonKey =
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export const AuthContext = createContext()
+const AuthContext = createContext()
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        // Check the current session and set the user
         const session = supabase.auth.getSession()
         setUser(session?.user || null)
         setLoading(false)
 
-        // Listen for changes in authentication state
         const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
             setUser(session?.user || null)
         })
@@ -38,12 +36,13 @@ export const AuthProvider = ({ children }) => {
                 password
             }),
         signOut: () => supabase.auth.signOut()
-        // ... add other auth functions as needed
     }
 
     return <AuthContext.Provider value={{ ...value, loading }}>{children}</AuthContext.Provider>
 }
 
-export const useAuth = () => {
+const useAuth = () => {
     return useContext(AuthContext)
 }
+
+export { supabase, AuthProvider, AuthContext, useAuth }

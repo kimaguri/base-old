@@ -4,9 +4,10 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { LoginPage } from './features/login-page'
 import { useAuth } from './components/supabase-auth-provider'
 import { PageLayout } from './components/page-layout/index.jsx'
-import { ObjectsPage } from './features/objects-page/index.jsx'
+import { ProjectsPage } from './features/projects-page/index.jsx'
 
 import './App.css'
+import { TabloPage } from './features/tablo-page/index.jsx'
 
 const PrivateRoute = ({ children }) => {
     const { user, loading } = useAuth()
@@ -25,8 +26,8 @@ const AuthenticatedRoutes = () => {
     return (
         <PageLayout>
             <Routes>
-                <Route path="/objects" element={<ObjectsPage />} />
-                <Route path="/profile" element={<div>{'Profile Page'}</div>} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/tablo" element={<div>{<TabloPage />}</div>} />
                 <Route path="/settings" element={<div>{'Settings Page'}</div>} />
             </Routes>
         </PageLayout>
