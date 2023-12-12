@@ -7,9 +7,9 @@ import { PageLayout } from './components/page-layout/index.jsx'
 import { ProjectsPage } from './features/projects-page/index.jsx'
 import { FinReportsPage } from './features/fin-reports-page/index.jsx'
 import { SettingsPage } from './features/settings-page/index.jsx'
+import { TimesheetPage } from './features/timesheet-page/index.jsx'
 
 import './App.css'
-import { TabloPage } from './features/tablo-page/index.jsx'
 
 const PrivateRoute = ({ children }) => {
     const { user, loading } = useAuth()
@@ -29,7 +29,7 @@ const AuthenticatedRoutes = () => {
         <PageLayout>
             <Routes>
                 <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/tablo" element={<div>{<TabloPage />}</div>} />
+                <Route path="/timesheet" element={<div>{<TimesheetPage />}</div>} />
                 <Route path="/fin-reports" element={<div>{<FinReportsPage />}</div>} />
                 <Route path="/settings" element={<div>{<SettingsPage />}</div>} />
             </Routes>

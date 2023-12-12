@@ -12,14 +12,19 @@ import {
     ModalOverlay
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
-import { SelectInput } from '../../../../components/form/components/select-input/index.jsx'
 
-function MyModal({ isOpen, onClose, onSubmit }) {
+import { SelectInput } from '../../../../components/form/components/select-input/index.jsx'
+import { useAuth } from '../../../../components/supabase-auth-provider/index.jsx'
+
+export const AddTimesheetRecordModal = ({ isOpen, onClose, onSubmit }) => {
     const {
         register,
         handleSubmit,
         formState: { errors }
     } = useForm()
+
+    const { user } = useAuth()
+    console.log('USER', user)
 
     const handleSubmitFormData = (data) => {
         onSubmit(data)
@@ -27,14 +32,14 @@ function MyModal({ isOpen, onClose, onSubmit }) {
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>My Modal</ModalHeader>
+                <ModalHeader mb={25}>Новый табель</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit(handleSubmitFormData)}>
                     <ModalBody>
-                        <FormControl isRequired>
+                        <FormControl mb={5} isRequired>
                             <FormLabel htmlFor="project_id">Project ID</FormLabel>
                             <SelectInput name="project_id" size="lg" register={register} />
                             {errors.project_id && <span>This field is required</span>}
@@ -51,9 +56,11 @@ function MyModal({ isOpen, onClose, onSubmit }) {
                         </FormControl>
                     </ModalBody>
                     <ModalFooter gap={5}>
-                        <Button type="submit">Submit</Button>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
-                            Close
+                        <Button type="submit" colorScheme="teal">
+                            Создать
+                        </Button>
+                        <Button mr={3} onClick={onClose} variant="outline" colorScheme="teal">
+                            Отмена
                         </Button>
                     </ModalFooter>
                 </form>
@@ -61,5 +68,3 @@ function MyModal({ isOpen, onClose, onSubmit }) {
         </Modal>
     )
 }
-
-export default MyModal

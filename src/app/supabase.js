@@ -3,10 +3,7 @@ import { supabase } from '../components/supabase-auth-provider/index.jsx'
 export const fetchData = async ({ tableName, foreignTables }) => {
     const { data, error } = await supabase.from(tableName).select(`
         *
-        ${foreignTables
-            ? foreignTables.map((item) => `,${item}(*)`)
-            : ''
-        }
+        ${foreignTables ? foreignTables.map((item) => `,${item}(*)`) : ''}
     `)
 
     if (error) {

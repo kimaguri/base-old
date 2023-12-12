@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Box, Flex } from '@chakra-ui/react'
 import { FaAddressBook, FaBitcoin, FaBrush, FaMoneyCheckDollar } from 'react-icons/fa6'
 
 import { PageLayoutWrapper } from './style.js'
 import MenuBar from './components/menu-bar'
 import MenuBarItem from './components/menu-bar/menu-bar-item'
-import { Box, Flex } from '@chakra-ui/react'
 
 const menuMeta = [
     {
@@ -21,10 +21,10 @@ const menuMeta = [
         route: '/projects'
     },
     {
-        key: 'tablo',
+        key: 'timesheet',
         title: 'Табель',
         icon: FaBrush,
-        route: '/tablo'
+        route: '/timesheet'
     },
     {
         key: 'settings',
