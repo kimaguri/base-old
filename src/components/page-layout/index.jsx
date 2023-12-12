@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FaAddressBook, FaBitcoin, FaBrush } from 'react-icons/fa6'
+import { FaAddressBook, FaBitcoin, FaBrush, FaMoneyCheckDollar } from 'react-icons/fa6'
 
 import { PageLayoutWrapper } from './style.js'
 import MenuBar from './components/menu-bar'
@@ -8,6 +8,12 @@ import MenuBarItem from './components/menu-bar/menu-bar-item'
 import { Box, Flex } from '@chakra-ui/react'
 
 const menuMeta = [
+    {
+        key: 'fin-reports',
+        title: 'Финансовые отчеты',
+        icon: FaMoneyCheckDollar,
+        route: '/fin-reports'
+    },
     {
         key: 'projects',
         title: 'Проекты',
