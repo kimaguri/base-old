@@ -5,6 +5,8 @@ import { LoginPage } from './features/login-page'
 import { useAuth } from './components/supabase-auth-provider'
 import { PageLayout } from './components/page-layout/index.jsx'
 import { ProjectsPage } from './features/projects-page/index.jsx'
+import { FinReportsPage } from './features/fin-reports-page/index.jsx'
+import { SettingsPage } from './features/settings-page/index.jsx'
 
 import './App.css'
 import { TabloPage } from './features/tablo-page/index.jsx'
@@ -28,7 +30,8 @@ const AuthenticatedRoutes = () => {
             <Routes>
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/tablo" element={<div>{<TabloPage />}</div>} />
-                <Route path="/settings" element={<div>{'Settings Page'}</div>} />
+                <Route path="/fin-reports" element={<div>{<FinReportsPage />}</div>} />
+                <Route path="/settings" element={<div>{<SettingsPage />}</div>} />
             </Routes>
         </PageLayout>
     )
