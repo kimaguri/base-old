@@ -18,6 +18,11 @@ export const tableMeta = [
         header: 'Дата',
         accessor: 'created_at',
         type: 'date'
+    },
+    {
+        header: 'Сотрудник',
+        accessor: 'employee_id',
+        type: 'string'
     }
 ]
 
