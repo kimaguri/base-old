@@ -1,5 +1,6 @@
 import { OrganizationsPage } from '../organizations-page/index.jsx'
 import { CalcModelsPage } from '../calc-models-page/index.jsx'
+import { DictionariesPage } from '../dictionaries-page/index.jsx'
 
 export const meta = [
     {
@@ -18,13 +19,18 @@ export const meta = [
         component: <div>{'Positions Page'}</div>
     },
     {
-        id: 'usersTab',
-        title: 'Пользователи',
-        component: <div>{'Users Page'}</div>
+        id: 'employeesTab',
+        title: 'Сотрудники',
+        component: <div>{'Employees Page'}</div>
     },
     {
         id: 'calcModelsTab',
         title: 'Модели расчета',
         component: <CalcModelsPage />
+    },
+    {
+        id: 'dictionariesTab',
+        title: 'Справочники',
+        component: <DictionariesPage />
     }
 ]

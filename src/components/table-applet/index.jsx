@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import {
     Box,
@@ -23,6 +24,7 @@ import { IndeterminateCheckbox } from './indeterminate-checkbox/index.jsx'
 
 export const TableApplet = ({ columns, data, variant = 'simple', onAddRecord }) => {
     const [rowSelection, setRowSelection] = useState({})
+    const lovs = useSelector((state) => state.app.lovs)
 
     const columnsArray = useMemo(
         () => [
@@ -48,9 +50,9 @@ export const TableApplet = ({ columns, data, variant = 'simple', onAddRecord }) 
                     />
                 )
             },
-            ...createColumns(columns)
+            ...createColumns(columns, lovs)
         ],
-        [columns]
+        [columns, lovs]
     )
 
     const tableInstance = useReactTable({
@@ -102,9 +104,9 @@ export const TableApplet = ({ columns, data, variant = 'simple', onAddRecord }) 
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                      header.column.columnDef.header,
-                                                      header.getContext()
-                                                  )}
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
                                         </Th>
                                     ))}
                                 </Tr>
