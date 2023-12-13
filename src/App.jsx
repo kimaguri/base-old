@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { Route, Routes, useNavigate } from 'react-router-dom'
+import { fetchDictionaries } from './app/appSlice.js'
 
 import { LoginPage } from './features/login-page'
 import { useAuth } from './components/supabase-auth-provider'
@@ -38,6 +40,16 @@ const AuthenticatedRoutes = () => {
 }
 
 export const App = () => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        initApp()
+    }, [dispatch])
+
+    const initApp = () => {
+        dispatch(fetchDictionaries())
+    }
+
     return (
         <Routes>
             <Route path="/login" element={<LoginPage />} />

@@ -15,6 +15,12 @@ export const meta = [
         type: 'string'
     },
     {
+        header: 'Статус',
+        accessor: 'status',
+        type: 'dictionary',
+        dictionaryName: 'fin_report_status'
+    },
+    {
         header: 'Комментарии',
         accessor: 'comments',
         type: 'string'
