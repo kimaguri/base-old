@@ -37,39 +37,37 @@ function MyModal({ isOpen, onClose, onSubmit }) {
                     <ModalBody>
                         <FormControl isRequired>
                             <FormLabel htmlFor="organization_id">Организация</FormLabel>
-                            <SelectInput source="organization" name="organization_id" size="lg" register={register} />
+                            <SelectInput
+                                source="organization"
+                                technicalName="organization_id"
+                                size="lg"
+                                register={register}
+                            />
                             {errors.organization_id && <span>Поле обязательное</span>}
                         </FormControl>
                         <FormControl isRequired>
                             <FormLabel htmlFor="name">Наименование</FormLabel>
-                            <Input
-                                id="name"
-                                size="lg"
-                                {...register('name', { required: true })}
-                            />
+                            <Input id="name" size="lg" {...register('name', { required: true })} />
                             {errors.name && <span>Поле обязательное</span>}
                         </FormControl>
                         <FormControl isRequired>
                             <FormLabel htmlFor="year">Год</FormLabel>
-                            <Input
-                                id="year"
-                                size="lg"
-                                {...register('year', { required: true })}
-                            />
+                            <Input id="year" size="lg" {...register('year', { required: true })} />
                             {errors.year && <span>Поле обязательное</span>}
                         </FormControl>
                         <FormControl isRequired>
                             <FormLabel htmlFor="status">Статус</FormLabel>
-                            <DictionaryInput dictionaryName="fin_report_status" name="status" size="lg" register={register} />
+                            <DictionaryInput
+                                dictionaryName="fin_report_status"
+                                name="status"
+                                size="lg"
+                                register={register}
+                            />
                             {errors.status && <span>Поле обязательное</span>}
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor="comments">Комментарии</FormLabel>
-                            <Input
-                                id="comments"
-                                size="lg"
-                                {...register('comments')}
-                            />
+                            <Input id="comments" size="lg" {...register('comments')} />
                         </FormControl>
                     </ModalBody>
                     <ModalFooter gap={5}>
