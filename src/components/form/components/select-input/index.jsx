@@ -3,7 +3,7 @@ import { Select } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSelectOptions } from '../../formSlice.js'
 
-export const SelectInput = ({ source = 'dev_projects', register, name }) => {
+export const SelectInput = ({ technicalName, source, register }) => {
     const dispatch = useDispatch()
     const lovs = useSelector((state) => state.form.lovs[source])
 
@@ -22,7 +22,7 @@ export const SelectInput = ({ source = 'dev_projects', register, name }) => {
     }
 
     return (
-        <Select {...register(name)} size="lg">
+        <Select {...register(technicalName)} size="lg">
             {lovs.map((lov) => (
                 <option key={lov.id} value={lov.id}>
                     {lov.name}

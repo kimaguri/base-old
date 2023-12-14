@@ -6,7 +6,7 @@ export const tableMeta = [
     },
     {
         header: 'Проект',
-        accessor: 'project_id',
+        accessor: 'dev_projects.name',
         type: 'string'
     },
     {

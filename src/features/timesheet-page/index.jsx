@@ -3,7 +3,7 @@ import Plate from '../../components/plate/index.jsx'
 import { tableMeta, tabsMeta } from './meta.jsx'
 import { fetchData, insertRecord } from '../../app/supabase.js'
 import { useEffect, useState } from 'react'
-import { AddTimesheetRecordModal } from './components/create-timesheet-record/index.jsx'
+import { AddTimesheetRecordModal } from './components/add-timesheet-record-modal/index.jsx'
 import { useAuth } from '../../components/supabase-auth-provider/index.jsx'
 import Tabs from '../../components/tabs/index.jsx'
 import { Flex } from '@chakra-ui/react'
@@ -14,8 +14,11 @@ export const TimesheetPage = () => {
     const { user } = useAuth()
 
     const handleFetch = () => {
-        fetchData({ tableName: 'timesheet' }).then((data) => setData(data))
+        fetchData({ tableName: 'timesheet', foreignTables: ['dev_projects'] }).then((data) =>
+            setData(data)
+        )
     }
+
     const handleSubmit = (data) => {
         insertRecord({
             tableName: 'timesheet',
