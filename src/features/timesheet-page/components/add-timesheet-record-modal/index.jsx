@@ -9,8 +9,7 @@ import {
     ModalOverlay
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
-
-import DynamicInput from '../../../../components/form/components/dynamic-input/index.jsx'
+import { FormApplet } from '../../../../components/form/components/index.jsx'
 import { timesheetModalMeta } from './timesheetModalMeta.js'
 
 export const AddTimesheetRecordModal = ({ isOpen, onClose, onSubmit }) => {
@@ -33,20 +32,11 @@ export const AddTimesheetRecordModal = ({ isOpen, onClose, onSubmit }) => {
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit(handleSubmitFormData)}>
                     <ModalBody>
-                        {timesheetModalMeta.map((input, index) => {
-                            return (
-                                <DynamicInput
-                                    technicalName={input.technicalName}
-                                    type={input.type}
-                                    label={input.label}
-                                    source={input.source}
-                                    register={register}
-                                    errors={errors}
-                                    key={`${input.technicalName}_${index}`}
-                                    required={input.required}
-                                />
-                            )
-                        })}
+                        <FormApplet
+                            meta={timesheetModalMeta}
+                            register={register}
+                            errors={errors}
+                        />
                     </ModalBody>
                     <ModalFooter gap={5}>
                         <Button type="submit" colorScheme="teal">

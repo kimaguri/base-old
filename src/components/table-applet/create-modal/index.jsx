@@ -10,9 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { FormApplet } from '../../../../components/form/components/index.jsx'
-import { finReportModalMeta } from './finReportModalMeta.js'
 
-export const AddFinReportRecordModal = ({ isOpen, onClose, onSubmit }) => {
+export const CreateRecordModal = ({ meta, isOpen, onClose, onSubmit }) => {
     const {
         register,
         handleSubmit,
@@ -28,12 +27,12 @@ export const AddFinReportRecordModal = ({ isOpen, onClose, onSubmit }) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Новый финансовый отчет</ModalHeader>
+                <ModalHeader>{meta.title}</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit(handleSubmitFormData)}>
                     <ModalBody>
                         <FormApplet
-                            meta={finReportModalMeta}
+                            meta={meta.fields}
                             register={register}
                             errors={errors}
                         />
@@ -51,4 +50,3 @@ export const AddFinReportRecordModal = ({ isOpen, onClose, onSubmit }) => {
         </Modal>
     )
 }
-

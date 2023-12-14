@@ -22,7 +22,7 @@ export const SelectInput = ({ technicalName, source, register }) => {
     }
 
     return (
-        <Select {...register(technicalName)} size="lg">
+        <Select {...register(technicalName)} size="lg" placeholder="...">
             {lovs.map((lov) => (
                 <option key={lov.id} value={lov.id}>
                     {lov.name}

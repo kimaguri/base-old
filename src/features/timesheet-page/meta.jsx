@@ -17,7 +17,7 @@ export const tableMeta = [
     {
         header: 'Дата',
         accessor: 'created_at',
-        type: 'date'
+        type: 'datetime'
     },
     {
         header: 'Сотрудник',
