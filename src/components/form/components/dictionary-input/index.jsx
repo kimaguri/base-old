@@ -2,7 +2,7 @@ import { Select } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
 import { dictionarySorter } from '../../../../utils/index.js'
 
-export const DictionaryInput = ({ dictionaryName, register, name }) => {
+export const DictionaryInput = ({ dictionaryName, register, technicalName }) => {
     const lov = useSelector((state) => state.app.lovs[dictionaryName]) || []
     const preparedLov = [...lov]
         .filter((item) => !item.inactive)
@@ -17,7 +17,7 @@ export const DictionaryInput = ({ dictionaryName, register, name }) => {
     }
 
     return (
-        <Select {...register(name)}>
+        <Select {...register(technicalName)} placeholder='...'>
             {preparedLov.map((lovItem) => (
                 <option key={lovItem.name} value={lovItem.name}>
                     {lovItem.value}

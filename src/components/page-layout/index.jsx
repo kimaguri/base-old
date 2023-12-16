@@ -9,6 +9,12 @@ import MenuBarItem from './components/menu-bar/menu-bar-item'
 
 const menuMeta = [
     {
+        key: 'clients',
+        title: 'Клиенты',
+        icon: FaAddressBook,
+        route: '/clients'
+    },
+    {
         key: 'fin-reports',
         title: 'Финансовые отчеты',
         icon: FaMoneyCheckDollar,

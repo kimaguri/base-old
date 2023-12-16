@@ -1,5 +1,11 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import { formatDate, getDictionaryDisplayValue, dictionarySorter } from '../../utils/index.js'
+import {
+    formatDate,
+    getDictionaryDisplayValue,
+    dictionarySorter,
+    RUS_DATE,
+    RUS_DATETIME
+} from '../../utils/index.js'
 
 const columnHelper = createColumnHelper()
 
@@ -13,7 +19,9 @@ export const createColumns = (columns, lovs) => {
                 cell: (info) => {
                     switch (col.type) {
                         case 'date':
-                            return formatDate({ dateString: info.getValue() })
+                            return formatDate({ dateString: info.getValue(), formatString: RUS_DATE })
+                        case 'datetime':
+                            return formatDate({ dateString: info.getValue(), formatString: RUS_DATETIME })
                         case 'dictionary':
                             return getDictionaryDisplayValue({
                                 dictionaryName: col.dictionaryName,

@@ -10,6 +10,7 @@ import { ProjectsPage } from './features/projects-page/index.jsx'
 import { FinReportsPage } from './features/fin-reports-page/index.jsx'
 import { SettingsPage } from './features/settings-page/index.jsx'
 import { TimesheetPage } from './features/timesheet-page/index.jsx'
+import { ClientsPage } from './features/clients-page/index.jsx'
 
 import './App.css'
 
@@ -30,10 +31,11 @@ const AuthenticatedRoutes = () => {
     return (
         <PageLayout>
             <Routes>
+                <Route path="/clients" element={<ClientsPage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/timesheet" element={<div>{<TimesheetPage />}</div>} />
-                <Route path="/fin-reports" element={<div>{<FinReportsPage />}</div>} />
-                <Route path="/settings" element={<div>{<SettingsPage />}</div>} />
+                <Route path="/timesheet" element={<TimesheetPage />} />
+                <Route path="/fin-reports" element={<FinReportsPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
             </Routes>
         </PageLayout>
     )

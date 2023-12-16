@@ -8,6 +8,7 @@ const DynamicInput = ({
     label,
     technicalName,
     source,
+    dictionaryName,
     required,
     disabled,
     register,
@@ -27,8 +28,8 @@ const DynamicInput = ({
             case 'dictionary':
                 return (
                     <DictionaryInput
-                        dictionaryName="fin_report_status"
-                        technicalName="status"
+                        dictionaryName={dictionaryName}
+                        technicalName={technicalName}
                         size="lg"
                         register={register}
                     />

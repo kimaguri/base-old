@@ -3,17 +3,21 @@ import Plate from '../../components/plate/index.jsx'
 import { fetchData, insertRecord } from '../../app/supabase.js'
 import { useEffect, useState } from 'react'
 import { meta } from './meta'
-import { AddFinReportRecordModal } from './components/create-fin-report-record/index.jsx'
+import { ClientRecordModal } from './components/create-client-record/index.jsx'
 
-export const FinReportsPage = () => {
+export const ClientsPage = () => {
     const [data, setData] = useState([])
     const [isOpen, setIsOpen] = useState(false)
 
     const handleFetch = () => {
-        fetchData({ tableName: 'fin_report', foreignTables: ['organization'] }).then((data) => setData(data))
+        fetchData({ tableName: 'client' }).then((data) => setData(data))
     }
     const handleSubmit = (data) => {
-        insertRecord({ tableName: 'fin_report', recordData: data }).then(handleFetch)
+        const clearedData = {// TODO_TEMP костыль для замены "" на null для uuid полей
+            ...data,
+            manager_id: !data.manager_id ? null : data.manager_id
+        }
+        insertRecord({ tableName: 'client', recordData: clearedData }).then(handleFetch)
     }
 
     useEffect(() => {
@@ -23,7 +27,7 @@ export const FinReportsPage = () => {
     return (
         <Plate>
             <TableApplet columns={meta} data={data} onAddRecord={() => setIsOpen(true)} />
-            <AddFinReportRecordModal isOpen={isOpen} onClose={() => setIsOpen(false)} onSubmit={handleSubmit} />
+            <ClientRecordModal isOpen={isOpen} onClose={() => setIsOpen(false)} onSubmit={handleSubmit} />
         </Plate>
     )
 }
