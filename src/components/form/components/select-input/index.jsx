@@ -3,13 +3,17 @@ import { Select } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSelectOptions } from '../../formSlice.js'
 
-export const SelectInput = ({ technicalName, source, register }) => {
+export const SelectInput = ({ source, value, onChange, ...props }) => {
     const dispatch = useDispatch()
     const lovs = useSelector((state) => state.form.lovs[source])
 
     useLayoutEffect(() => {
         if (!lovs) {
             dispatch(fetchSelectOptions({ tableName: source }))
+        }
+
+        if (lovs && lovs.length > 0) {
+            props.setValue(props.name, lovs[0].id, { shouldValidate: true })
         }
     }, [dispatch, source])
 
@@ -22,7 +26,7 @@ export const SelectInput = ({ technicalName, source, register }) => {
     }
 
     return (
-        <Select {...register(technicalName)} size="lg" placeholder="...">
+        <Select value={value} onChange={onChange} {...props} size="lg">
             {lovs.map((lov) => (
                 <option key={lov.id} value={lov.id}>
                     {lov.name}

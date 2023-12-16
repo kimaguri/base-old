@@ -1,4 +1,4 @@
-import { Tab, TabList, Tabs } from '@chakra-ui/react'
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 
 const TabsComponent = ({ meta }) => {
     return (
@@ -8,13 +8,11 @@ const TabsComponent = ({ meta }) => {
                     <Tab key={item.id}>{item.title}</Tab>
                 ))}
             </TabList>
-            {/*<TabPanels>*/}
-            {/*    {meta.map((item) => (*/}
-            {/*        <TabPanel key={item.id}>*/}
-            {/*            {item.component}*/}
-            {/*        </TabPanel>*/}
-            {/*    ))}*/}
-            {/*</TabPanels>*/}
+            <TabPanels>
+                {meta.map((item) => (
+                    <TabPanel key={item.id}>{item.component}</TabPanel>
+                ))}
+            </TabPanels>
         </Tabs>
     )
 }
