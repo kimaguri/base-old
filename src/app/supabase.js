@@ -26,10 +26,30 @@ export const insertRecord = async ({ tableName, recordData }) => {
     const { data, error } = await supabase.from(tableName).insert(recordData)
 
     if (error) {
-        console.error('Error fetching data:', error)
+        console.error('Error inserting data:', error)
 
         return
     }
 
     return data
+}
+
+export const modifyRecord = async ({ tableName, recordData, recordId }) => {
+    const { error } = await supabase.from(tableName)
+        .update(recordData)
+        .eq('id', recordId)
+
+    if (error) {
+        console.error('Error modifing data:', error)
+    }
+}
+
+export const deleteRecord = async ({ tableName, recordId }) => {
+    const { error } = await supabase.from(tableName)
+        .delete()
+        .eq('id', recordId)
+
+    if (error) {
+        console.error('Error deleting data:', error)
+    }
 }

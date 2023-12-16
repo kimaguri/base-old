@@ -1,6 +1,6 @@
 import DynamicInput from './dynamic-input/index.jsx'
 
-export const FormApplet = ({ meta, control, setValue, errors }) => {
+export const FormApplet = ({ meta = [], control, setValue, errors }) => {
     return (
         <>
             {meta.map((input, index) => {

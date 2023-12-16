@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
     Button,
     Modal,
@@ -9,33 +10,40 @@ import {
     ModalOverlay
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
-import { FormApplet } from '../../../../components/form/components/index.jsx'
-import { clientModalMeta } from './clientModalMeta.js'
+import { FormApplet } from '../../form/components/index.jsx'
 
-export const ClientRecordModal = ({ isOpen, onClose, onSubmit }) => {
+export const EditRecordModal = ({ recordData, meta, isOpen, onClose, onSubmit }) => {
     const {
         control,
-        handleSubmit,
         setValue,
+        handleSubmit,
         reset,
         formState: { errors }
     } = useForm()
 
+    useEffect(() => {
+        reset(recordData)
+    }, [recordData])
+
     const handleSubmitFormData = (data) => {
-        onSubmit(data)
+        const dataWithoutJoins = Object.fromEntries(
+            Object.entries(data).filter(([key]) => typeof data[key] !== 'object')
+        )
+        onSubmit(dataWithoutJoins)
+        reset()
         onClose()
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Новый клиент</ModalHeader>
+                <ModalHeader mb={25}>{meta.title || 'Редактирование записи'}</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit(handleSubmitFormData)}>
                     <ModalBody>
                         <FormApplet
-                            meta={clientModalMeta}
+                            meta={meta.fields}
                             control={control}
                             setValue={setValue}
                             errors={errors}
@@ -43,7 +51,7 @@ export const ClientRecordModal = ({ isOpen, onClose, onSubmit }) => {
                     </ModalBody>
                     <ModalFooter gap={5}>
                         <Button type="submit" colorScheme="teal">
-                            Создать
+                            Изменить
                         </Button>
                         <Button mr={3} onClick={onClose} variant="outline" colorScheme="teal">
                             Отмена
