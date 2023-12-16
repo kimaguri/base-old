@@ -15,7 +15,7 @@ export const SelectInput = ({ source, value, onChange, ...props }) => {
         if (lovs && lovs.length > 0) {
             props.setValue(props.name, lovs[0].id, { shouldValidate: true })
         }
-    }, [dispatch, source])
+    }, [dispatch, lovs, props, source])
 
     if (!lovs || lovs.length === 0) {
         return (

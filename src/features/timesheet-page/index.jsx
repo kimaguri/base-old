@@ -20,7 +20,6 @@ export const TimesheetPage = () => {
     }
 
     const handleSubmit = (data) => {
-        console.log('@@@@@@@@@@@@', data)
         insertRecord({
             tableName: 'timesheet',
             recordData: { ...data, employee_id: user.id }

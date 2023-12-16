@@ -36,8 +36,6 @@ const DynamicInput = ({
                         size="lg"
                     />
                 )
-            case 'text':
-                return <Input size="lg" type="text" {...control.register(technicalName)} />
             case 'date':
                 return (
                     <Controller
@@ -47,7 +45,7 @@ const DynamicInput = ({
                     />
                 )
             default:
-                return null
+                return <Input size="lg" type="text" {...control.register(technicalName)} />
         }
     }
 
