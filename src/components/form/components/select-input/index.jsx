@@ -1,9 +1,9 @@
-import { useLayoutEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { Select } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSelectOptions } from '../../formSlice.js'
 
-export const SelectInput = ({ source, value, onChange, ...props }) => {
+export const SelectInput = ({ source, value, onChange, setValue, name, ...props }) => {
     const dispatch = useDispatch()
     const lovs = useSelector((state) => state.form.lovs[source])
 
@@ -11,11 +11,13 @@ export const SelectInput = ({ source, value, onChange, ...props }) => {
         if (!lovs) {
             dispatch(fetchSelectOptions({ tableName: source }))
         }
-
-        if (lovs && lovs.length > 0) {
-            props.setValue(props.name, lovs[0].id, { shouldValidate: true })
-        }
     }, [dispatch, lovs, props, source])
+
+    useEffect(() => {
+        if (lovs && lovs.length > 0) {
+            setValue(name, lovs[0].id)
+        }
+    }, [lovs, setValue])
 
     if (!lovs || lovs.length === 0) {
         return (

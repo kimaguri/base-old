@@ -14,8 +14,10 @@ import { clientModalMeta } from './clientModalMeta.js'
 
 export const ClientRecordModal = ({ isOpen, onClose, onSubmit }) => {
     const {
-        register,
+        control,
         handleSubmit,
+        setValue,
+        reset,
         formState: { errors }
     } = useForm()
 
@@ -34,7 +36,8 @@ export const ClientRecordModal = ({ isOpen, onClose, onSubmit }) => {
                     <ModalBody>
                         <FormApplet
                             meta={clientModalMeta}
-                            register={register}
+                            control={control}
+                            setValue={setValue}
                             errors={errors}
                         />
                     </ModalBody>

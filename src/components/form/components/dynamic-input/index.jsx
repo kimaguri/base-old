@@ -29,11 +29,17 @@ const DynamicInput = ({
                 )
             case 'dictionary':
                 return (
-                    <DictionaryInput
-                        {...control.register(technicalName)}
-                        dictionaryName={dictionaryName}
-                        technicalName={technicalName}
-                        size="lg"
+                    <Controller
+                        name={technicalName}
+                        control={control}
+                        render={({ field }) => (
+                            <DictionaryInput
+                                {...field}
+                                dictionaryName={dictionaryName}
+                                setValue={setValue}
+                                size="lg"
+                            />
+                        )}
                     />
                 )
             case 'date':
@@ -45,7 +51,7 @@ const DynamicInput = ({
                     />
                 )
             default:
-                return <Input size="lg" type="text" {...control.register(technicalName)} />
+                return <Input type="text" {...control.register(technicalName)} size="lg" />
         }
     }
 
