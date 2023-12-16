@@ -1,43 +1,53 @@
-import React from 'react'
+import { Controller } from 'react-hook-form'
 import { SelectInput } from '../select-input/index.jsx'
 import { FormControl, FormLabel, Input } from '@chakra-ui/react'
 import { DictionaryInput } from '../dictionary-input/index.jsx'
+import { DatePickerInput } from '../datepicker-input/index.jsx'
 
 const DynamicInput = ({
+    control,
+    setValue,
     type,
     label,
     technicalName,
     source,
     dictionaryName,
     required,
-    disabled,
-    register,
     errors
 }) => {
     const renderInput = () => {
         switch (type) {
             case 'select':
                 return (
-                    <SelectInput
-                        technicalName={technicalName}
-                        source={source}
-                        register={register}
-                        size="lg"
+                    <Controller
+                        name={technicalName}
+                        control={control}
+                        render={({ field }) => (
+                            <SelectInput {...field} source={source} setValue={setValue} size="lg" />
+                        )}
                     />
                 )
             case 'dictionary':
                 return (
                     <DictionaryInput
+                        {...control.register(technicalName)}
                         dictionaryName={dictionaryName}
                         technicalName={technicalName}
                         size="lg"
-                        register={register}
                     />
                 )
             case 'text':
-                return <Input size="lg" type="text" {...register(technicalName)} />
+                return <Input size="lg" type="text" {...control.register(technicalName)} />
+            case 'date':
+                return (
+                    <Controller
+                        name={technicalName}
+                        control={control}
+                        render={({ field }) => <DatePickerInput {...field} />}
+                    />
+                )
             default:
-                return <React.Fragment />
+                return null
         }
     }
 
