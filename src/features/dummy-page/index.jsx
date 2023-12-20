@@ -110,7 +110,7 @@ export const DummyPage = () => {
 
     return (
         <Plate>
-            <TableApplet columns={meta} data={data} />
+            <TableApplet meta={meta} />
         </Plate>
     )
 }

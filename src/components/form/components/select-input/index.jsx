@@ -28,7 +28,7 @@ export const SelectInput = ({ source, value, onChange, setValue, name, ...props 
     }
 
     return (
-        <Select value={value} onChange={onChange} {...props} size="lg">
+        <Select value={value} onChange={onChange} {...props} size="lg" placeholder="...">
             {lovs.map((lov) => (
                 <option key={lov.id} value={lov.id}>
                     {lov.name}

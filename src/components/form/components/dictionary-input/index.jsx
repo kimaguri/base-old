@@ -27,7 +27,7 @@ export const DictionaryInput = ({ dictionaryName, value, onChange, setValue, nam
     }
 
     return (
-        <Select value={value} onChange={onChange} {...props} size="lg">
+        <Select value={value} onChange={onChange} {...props} size="lg" placeholder="...">
             {preparedLov.map((lovItem) => (
                 <option key={lovItem.name} value={lovItem.name}>
                     {lovItem.value}
