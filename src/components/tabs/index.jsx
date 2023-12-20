@@ -2,8 +2,8 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 
 const TabsComponent = ({ meta }) => {
     return (
-        <Tabs>
-            <TabList>
+        <Tabs variant="soft-rounded" maxH={1150} overflowX="auto" overflowY="auto">
+            <TabList gap={15}>
                 {meta.map((item) => (
                     <Tab key={item.id}>{item.title}</Tab>
                 ))}
