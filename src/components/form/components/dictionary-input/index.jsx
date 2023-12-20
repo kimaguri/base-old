@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 import { dictionarySorter } from '../../../../utils/index.js'
 
 export const DictionaryInput = ({ dictionaryName, value, onChange, setValue, name, ...props }) => {
-    console.log('loop')
     const lov = useSelector((state) => state.app.lovs[dictionaryName])
 
     const preparedLov = useMemo(() => {
@@ -30,7 +29,7 @@ export const DictionaryInput = ({ dictionaryName, value, onChange, setValue, nam
     return (
         <Select value={value} onChange={onChange} {...props} size="lg">
             {preparedLov.map((lovItem) => (
-                <option key={lovItem.name} value={lovItem.value}>
+                <option key={lovItem.name} value={lovItem.name}>
                     {lovItem.value}
                 </option>
             ))}

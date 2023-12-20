@@ -68,7 +68,7 @@ export const TableApplet = ({ columns, data, variant = 'simple', onAddRecord }) 
     })
 
     return (
-        <TableContainer>
+        <TableContainer maxH={1150} overflowX="auto" overflowY="auto">
             <Flex flexDir="column" gap={5}>
                 <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                     <InputGroup width="550px">
@@ -104,9 +104,9 @@ export const TableApplet = ({ columns, data, variant = 'simple', onAddRecord }) 
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                                      header.column.columnDef.header,
+                                                      header.getContext()
+                                                  )}
                                         </Th>
                                     ))}
                                 </Tr>
