@@ -1,3 +1,5 @@
+import { TableApplet } from '../../components/table-applet/index.jsx'
+
 export const tableMeta = {
     tableName: 'timesheet',
     foreignTables: ['dev_projects'],
@@ -32,6 +34,12 @@ export const tableMeta = {
         title: 'Новый табель',
         fields: [
             {
+                label: 'Дата',
+                technicalName: 'issue_date',
+                type: 'date',
+                required: true
+            },
+            {
                 label: 'Проект',
                 technicalName: 'project_id',
                 type: 'select',
@@ -49,6 +57,12 @@ export const tableMeta = {
     editRecord: {
         title: 'Новый табель',
         fields: [
+            {
+                label: 'Дата',
+                technicalName: 'issue_date',
+                type: 'date',
+                required: true
+            },
             {
                 label: 'Проект',
                 technicalName: 'project_id',
@@ -69,10 +83,12 @@ export const tableMeta = {
 export const tabsMeta = [
     {
         id: 'my_timesheets',
-        title: 'Мои табели'
+        title: 'Мои табели',
+        component: <TableApplet meta={tableMeta} />
     },
     {
         id: 'all_timesheets',
-        title: 'Все табели'
+        title: 'Все табели',
+        component: <TableApplet meta={tableMeta} />
     }
 ]

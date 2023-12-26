@@ -1,11 +1,6 @@
-import { TableApplet } from '../../components/table-applet/index.jsx'
-import Plate from '../../components/plate/index.jsx'
-import { meta } from './meta'
+import { tabsMeta } from './meta.jsx'
+import Tabs from '../../components/tabs/index.jsx'
 
 export const ProjectsPage = () => {
-    return (
-        <Plate>
-            <TableApplet meta={meta} />
-        </Plate>
-    )
+    return <Tabs meta={tabsMeta} />
 }

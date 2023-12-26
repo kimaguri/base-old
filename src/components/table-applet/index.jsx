@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import {
@@ -18,14 +18,18 @@ import {
 
 import { createColumns } from './utils.js'
 import { FiSearch } from 'react-icons/fi'
-import { FaPlus, FaPen, FaTrashCan } from 'react-icons/fa6'
+import { FaPen, FaPlus, FaTrashCan } from 'react-icons/fa6'
 import { IconButtonStyled } from './style.js'
 import { IndeterminateCheckbox } from './indeterminate-checkbox/index.jsx'
-import { fetchData, insertRecord, modifyRecord, deleteRecord } from '../../app/supabase.js'
+import { deleteRecord, fetchData, insertRecord, modifyRecord } from '../../app/supabase.js'
 import { AddRecordModal } from './add-record-modal/index.jsx'
 import { EditRecordModal } from './edit-record-modal/index.jsx'
+import Plate from '../plate/index.jsx'
+import { useAuth } from '../supabase-auth-provider/index.jsx'
 
-export const TableApplet = ({ meta, variant = 'simple', prepareAddData, prepareEditData }) => {
+export const TableApplet = ({ meta, variant = 'simple', prepareEditData }) => {
+    const { user } = useAuth()
+
     const [rowSelection, setRowSelection] = useState({})
     const [data, setData] = useState([])
     const [isAddRecordModalOpen, setIsAddRecordModalOpen] = useState(false)
@@ -34,18 +38,32 @@ export const TableApplet = ({ meta, variant = 'simple', prepareAddData, prepareE
     const selectedRecordsIds = Object.keys(rowSelection)
     const firstSelectedRecordId = selectedRecordsIds[0]
     const firstSelectedRecordData = data.find((record) => record.id === firstSelectedRecordId)
-    const { tableName, foreignTables, columns } = meta
+    const { tableName, foreignTables, columns } = meta || {}
     const isAddRecordAvailable = meta.addRecord
     const isDeleteRecordAvailable = firstSelectedRecordId && meta.deleteRecord?.disabled !== true
     const isEditRecordAvailable = firstSelectedRecordId && meta.editRecord
+
+    const currentColumns = meta.columns.map((item) => item.accessor)
+    const prepareAddData = (newRecordData) => {
+        const addData = { ...newRecordData }
+
+        // Dynamically add properties if they exist in currentColumns
+        if (currentColumns.includes('manager_id')) {
+            addData.manager_id = addData.manager_id || null
+        }
+
+        if (currentColumns.includes('employee_id')) {
+            addData.employee_id = user.id
+        }
+
+        return addData
+    }
 
     useEffect(() => {
         handleFetch()
     }, [])
 
     const getTableRowId = (row) => row.id
-
-
 
     const handleFetch = () => {
         fetchData({ tableName, foreignTables }).then((data) => setData(data))
@@ -63,26 +81,27 @@ export const TableApplet = ({ meta, variant = 'simple', prepareAddData, prepareE
     }
 
     const handleSubmitAdd = (newRecordData) => {
-        const addData = prepareAddData ? prepareAddData(newRecordData) : newRecordData
-        insertRecord({ tableName, recordData: addData }).then(handleFetch)
+        insertRecord({ tableName, recordData: prepareAddData(newRecordData) }).then(handleFetch)
     }
 
     const handleSubmitEdit = (editRecordData) => {
         const editData = prepareEditData ? prepareEditData(editRecordData) : editRecordData
-        modifyRecord({ tableName, recordId: firstSelectedRecordId, recordData: editData })
-            .then(() => {
+        modifyRecord({ tableName, recordId: firstSelectedRecordId, recordData: editData }).then(
+            () => {
                 handleFetch()
                 setRowSelection({})
-            })
+            }
+        )
     }
 
     const handleDelete = () => {
-        const arrayDeleteRecords = selectedRecordsIds.map((recordId) => deleteRecord({ tableName, recordId }))
-        Promise.all(arrayDeleteRecords)
-            .then(() => {
-                handleFetch()
-                setRowSelection({})
-            })
+        const arrayDeleteRecords = selectedRecordsIds.map((recordId) =>
+            deleteRecord({ tableName, recordId })
+        )
+        Promise.all(arrayDeleteRecords).then(() => {
+            handleFetch()
+            setRowSelection({})
+        })
     }
 
     const columnsArray = useMemo(
@@ -127,100 +146,120 @@ export const TableApplet = ({ meta, variant = 'simple', prepareAddData, prepareE
         onRowSelectionChange: setRowSelection
     })
 
-    return <>
-        {isAddRecordAvailable && <AddRecordModal
-            meta={meta.addRecord}
-            isOpen={isAddRecordModalOpen}
-            onClose={() => setIsAddRecordModalOpen(false)}
-            onSubmit={handleSubmitAdd}
-        />}
-        {isEditRecordAvailable && <EditRecordModal
-            recordData={firstSelectedRecordData}
-            meta={meta.editRecord}
-            isOpen={isEditRecordModalOpen}
-            onClose={() => setIsEditRecordModalOpen(false)}
-            onSubmit={handleSubmitEdit}
-        />}
-        <TableContainer maxH={1150} overflowX="auto" overflowY="auto">
-            <Flex flexDir="column" gap={5}>
-                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
-                    <InputGroup width="550px">
-                        <InputLeftElement
-                            pointerEvents="none"
-                            height="100%"
-                            alignItems="center"
-                            ml={2}
-                        >
-                            <FiSearch color="gray.300" fontSize={24} />
-                        </InputLeftElement>
-                        <Input type="text" placeholder="Поиск" size="lg" />
-                    </InputGroup>
-                    <InputGroup justifyContent="end" gap="15px">
-                        {isAddRecordAvailable && <IconButtonStyled
-                            aria-label={'Add record'}
-                            icon={<FaPlus />}
-                            isRound
-                            onClick={handleAdd}
-                        />}
-                        {isEditRecordAvailable && <IconButtonStyled
-                            aria-label={'Edit record'}
-                            icon={<FaPen />}
-                            isRound
-                            onClick={handleEdit}
-                        />}
-                        {isDeleteRecordAvailable && <IconButtonStyled
-                            aria-label={'Delete record'}
-                            icon={<FaTrashCan />}
-                            isRound
-                            onClick={handleDelete}
-                        />}
-                    </InputGroup>
-                </Box>
-                <Table variant={variant}>
-                    <Thead>
-                        {tableInstance.getHeaderGroups().map((headerGroup) => {
-                            return (
-                                <Tr key={headerGroup.id}>
-                                    {headerGroup?.headers.map((header) => (
-                                        <Th
-                                            key={header.id}
-                                            isNumeric={header.column.columnDef.type === 'numeric'}
-                                            color="black"
-                                            fontSize={12}
-                                        >
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                      header.column.columnDef.header,
-                                                      header.getContext()
-                                                  )}
-                                        </Th>
-                                    ))}
-                                </Tr>
-                            )
-                        })}
-                    </Thead>
-                    <Tbody>
-                        {tableInstance.getRowModel().rows.map((row) => {
-                            return (
-                                <Tr key={row.id}>
-                                    {row.getVisibleCells().map((cell) => (
-                                        <Td
-                                            key={cell.id}
-                                            isNumeric={cell.column.columnDef.type === 'numeric'}
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </Td>
-                                    ))}
-                                </Tr>
-                            )
-                        })}
-                    </Tbody>
-                </Table>
-            </Flex>
-        </TableContainer>
-    </>
+    return (
+        <Plate>
+            <TableContainer maxH={1150} overflowX="auto" overflowY="auto">
+                <Flex flexDir="column" gap={5}>
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        width="100%"
+                    >
+                        <InputGroup width="550px">
+                            <InputLeftElement
+                                pointerEvents="none"
+                                height="100%"
+                                alignItems="center"
+                                ml={2}
+                            >
+                                <FiSearch color="gray.300" fontSize={24} />
+                            </InputLeftElement>
+                            <Input type="text" placeholder="Поиск" size="lg" />
+                        </InputGroup>
+                        <InputGroup justifyContent="end" gap="15px">
+                            {isAddRecordAvailable && (
+                                <IconButtonStyled
+                                    aria-label={'Add record'}
+                                    icon={<FaPlus />}
+                                    isRound
+                                    onClick={handleAdd}
+                                />
+                            )}
+                            {isEditRecordAvailable && (
+                                <IconButtonStyled
+                                    aria-label={'Edit record'}
+                                    icon={<FaPen />}
+                                    isRound
+                                    onClick={handleEdit}
+                                />
+                            )}
+                            {isDeleteRecordAvailable && (
+                                <IconButtonStyled
+                                    aria-label={'Delete record'}
+                                    icon={<FaTrashCan />}
+                                    isRound
+                                    onClick={handleDelete}
+                                />
+                            )}
+                        </InputGroup>
+                    </Box>
+                    <Table variant={variant}>
+                        <Thead>
+                            {tableInstance.getHeaderGroups().map((headerGroup) => {
+                                return (
+                                    <Tr key={headerGroup.id}>
+                                        {headerGroup?.headers.map((header) => (
+                                            <Th
+                                                key={header.id}
+                                                isNumeric={
+                                                    header.column.columnDef.type === 'numeric'
+                                                }
+                                                color="black"
+                                                fontSize={12}
+                                            >
+                                                {header.isPlaceholder
+                                                    ? null
+                                                    : flexRender(
+                                                          header.column.columnDef.header,
+                                                          header.getContext()
+                                                      )}
+                                            </Th>
+                                        ))}
+                                    </Tr>
+                                )
+                            })}
+                        </Thead>
+                        <Tbody>
+                            {tableInstance.getRowModel().rows.map((row) => {
+                                return (
+                                    <Tr key={row.id}>
+                                        {row.getVisibleCells().map((cell) => (
+                                            <Td
+                                                key={cell.id}
+                                                isNumeric={cell.column.columnDef.type === 'numeric'}
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </Td>
+                                        ))}
+                                    </Tr>
+                                )
+                            })}
+                        </Tbody>
+                    </Table>
+                </Flex>
+            </TableContainer>
+
+            {isAddRecordAvailable && (
+                <AddRecordModal
+                    meta={meta.addRecord}
+                    isOpen={isAddRecordModalOpen}
+                    onClose={() => setIsAddRecordModalOpen(false)}
+                    onSubmit={handleSubmitAdd}
+                />
+            )}
+            {isEditRecordAvailable && (
+                <EditRecordModal
+                    recordData={firstSelectedRecordData}
+                    meta={meta.editRecord}
+                    isOpen={isEditRecordModalOpen}
+                    onClose={() => setIsEditRecordModalOpen(false)}
+                    onSubmit={handleSubmitEdit}
+                />
+            )}
+        </Plate>
+    )
 }
