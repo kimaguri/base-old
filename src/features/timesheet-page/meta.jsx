@@ -20,8 +20,13 @@ export const tableMeta = {
             type: 'string'
         },
         {
-            header: 'Дата',
+            header: 'Дата создания',
             accessor: 'created_at',
+            type: 'datetime'
+        },
+        {
+            header: 'Дата работ',
+            accessor: 'issue_date',
             type: 'datetime'
         },
         {
@@ -51,6 +56,12 @@ export const tableMeta = {
                 technicalName: 'hours_amount',
                 type: 'text',
                 required: true
+            },
+            {
+                label: 'Сотрудник',
+                technicalName: 'employee_id',
+                type: 'hidden',
+                predefault: 'userId'
             }
         ]
     },

@@ -16,7 +16,7 @@ import {
     Tr
 } from '@chakra-ui/react'
 
-import { createColumns } from './utils.js'
+import { createColumns, prepareAddData, prepareEditData } from './utils.js'
 import { FiSearch } from 'react-icons/fi'
 import { FaPen, FaPlus, FaTrashCan } from 'react-icons/fa6'
 import { IconButtonStyled } from './style.js'
@@ -27,7 +27,7 @@ import { EditRecordModal } from './edit-record-modal/index.jsx'
 import Plate from '../plate/index.jsx'
 import { useAuth } from '../supabase-auth-provider/index.jsx'
 
-export const TableApplet = ({ meta, variant = 'simple', prepareEditData }) => {
+export const TableApplet = ({ meta, variant = 'simple' }) => {
     const { user } = useAuth()
 
     const [rowSelection, setRowSelection] = useState({})
@@ -37,27 +37,11 @@ export const TableApplet = ({ meta, variant = 'simple', prepareEditData }) => {
     const lovs = useSelector((state) => state.app.lovs)
     const selectedRecordsIds = Object.keys(rowSelection)
     const firstSelectedRecordId = selectedRecordsIds[0]
-    const firstSelectedRecordData = data.find((record) => record.id === firstSelectedRecordId)
-    const { tableName, foreignTables, columns } = meta || {}
+    const firstSelectedRecordData = data.filter((record) => record.id === firstSelectedRecordId)
+    const { tableName, foreignTables, columns, addRecord, editRecord } = meta || {}
     const isAddRecordAvailable = meta.addRecord
     const isDeleteRecordAvailable = firstSelectedRecordId && meta.deleteRecord?.disabled !== true
     const isEditRecordAvailable = firstSelectedRecordId && meta.editRecord
-
-    const currentColumns = meta.columns.map((item) => item.accessor)
-    const prepareAddData = (newRecordData) => {
-        const addData = { ...newRecordData }
-
-        // Dynamically add properties if they exist in currentColumns
-        if (currentColumns.includes('manager_id')) {
-            addData.manager_id = addData.manager_id || null
-        }
-
-        if (currentColumns.includes('employee_id')) {
-            addData.employee_id = user.id
-        }
-
-        return addData
-    }
 
     useEffect(() => {
         handleFetch()
@@ -81,17 +65,21 @@ export const TableApplet = ({ meta, variant = 'simple', prepareEditData }) => {
     }
 
     const handleSubmitAdd = (newRecordData) => {
-        insertRecord({ tableName, recordData: prepareAddData(newRecordData) }).then(handleFetch)
+        insertRecord({
+            tableName,
+            recordData: prepareAddData(newRecordData, addRecord?.fields, { user })
+        }).then(handleFetch)
     }
 
     const handleSubmitEdit = (editRecordData) => {
-        const editData = prepareEditData ? prepareEditData(editRecordData) : editRecordData
-        modifyRecord({ tableName, recordId: firstSelectedRecordId, recordData: editData }).then(
-            () => {
-                handleFetch()
-                setRowSelection({})
-            }
-        )
+        modifyRecord({
+            tableName,
+            recordId: firstSelectedRecordId,
+            recordData: prepareEditData(editRecordData, editRecord?.fields)
+        }).then(() => {
+            handleFetch()
+            setRowSelection({})
+        })
     }
 
     const handleDelete = () => {
