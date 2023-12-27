@@ -45,3 +45,38 @@ export const createColumns = (columns, lovs) => {
             })
         )
 }
+
+export const prepareAddData = (newRecordData, addRecordColumns, context) => {
+    const addData = predefaultData(newRecordData, addRecordColumns, context)
+    const addRecordOptSelects = addRecordColumns
+        .filter((item) => item.type === 'select' && !item.required)
+        .map((item) => item.technicalName)
+    addRecordOptSelects.forEach((item) => addData[item] = addData[item] || null)
+
+    return addData
+}
+
+export const prepareEditData = (editRecordData, editRecordColumns) => {
+    const editData = { ...editRecordData }
+    const editRecordOptSelects = editRecordColumns
+        .filter((item) => item.type === 'select' && !item.required)
+        .map((item) => item.technicalName)
+    editRecordOptSelects.forEach((item) => editData[item] = editData[item] || null)
+
+    return editData
+}
+
+export const predefaultData = (addData, columns, context) => {
+    const resultData = { ...addData }
+    const columnsWithPredefault = columns.filter((item) => !!item.predefault)
+    columnsWithPredefault.forEach((item) => {
+        switch (item.predefault) {
+            case 'userId':
+                const userId = context.user.id
+                resultData[item.technicalName] = userId
+            default:
+        }
+    })
+    
+    return resultData
+}

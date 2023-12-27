@@ -50,9 +50,15 @@ const DynamicInput = ({
                         render={({ field }) => <DatePickerInput {...field} />}
                     />
                 )
+            case 'hidden':
+                return null   
             default:
                 return <Input type="text" {...control.register(technicalName)} size="lg" />
         }
+    }
+
+    if (type === 'hidden') {
+        return null
     }
 
     return (

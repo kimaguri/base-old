@@ -51,6 +51,12 @@ export const tableMeta = {
                 technicalName: 'hours_amount',
                 type: 'text',
                 required: true
+            },
+            {
+                label: 'Сотрудник',
+                technicalName: 'employee_id',
+                type: 'hidden',
+                predefault: 'userId'
             }
         ]
     },
