@@ -109,7 +109,8 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                     <IndeterminateCheckbox
                         {...{
                             isChecked: table.getIsAllRowsSelected(),
-                            indeterminate: table.getIsSomeRowsSelected(),
+                            isIndeterminate:
+                                table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected(),
                             onChange: table.getToggleAllRowsSelectedHandler()
                         }}
                     />
@@ -119,7 +120,7 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                         {...{
                             isChecked: row.getIsSelected(),
                             disabled: !row.getCanSelect(),
-                            indeterminate: row.getIsSomeSelected(),
+                            isIndeterminate: row.getIsSomeSelected(),
                             onChange: row.getToggleSelectedHandler()
                         }}
                     />
