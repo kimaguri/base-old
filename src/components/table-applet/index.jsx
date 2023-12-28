@@ -26,10 +26,12 @@ import { AddRecordModal } from './add-record-modal/index.jsx'
 import { EditRecordModal } from './edit-record-modal/index.jsx'
 import Plate from '../plate/index.jsx'
 import { useAuth } from '../supabase-auth-provider/index.jsx'
+import { Shimmer } from '../shimmer/index.jsx'
 
 export const TableApplet = ({ meta, variant = 'simple' }) => {
     const { user } = useAuth()
 
+    const [isLoading, setIsLoading] = useState(true)
     const [rowSelection, setRowSelection] = useState({})
     const [data, setData] = useState([])
     const [isAddRecordModalOpen, setIsAddRecordModalOpen] = useState(false)
@@ -50,7 +52,14 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
     const getTableRowId = (row) => row.id
 
     const handleFetch = () => {
-        fetchData({ tableName, foreignTables }).then((data) => setData(data))
+        setIsLoading(true) // Start loading
+        fetchData({ tableName, foreignTables })
+            .then((data) => {
+                setData(data)
+            })
+            .finally(() => {
+                setIsLoading(false) // End loading
+            })
     }
 
     const handleAdd = () => {
@@ -133,6 +142,10 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
         },
         onRowSelectionChange: setRowSelection
     })
+
+    if (isLoading) {
+        return <Shimmer />
+    }
 
     return (
         <Plate>
