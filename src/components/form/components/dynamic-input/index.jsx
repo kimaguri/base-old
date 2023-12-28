@@ -1,6 +1,7 @@
 import { Controller } from 'react-hook-form'
-import { SelectInput } from '../select-input/index.jsx'
 import { FormControl, FormLabel, Input } from '@chakra-ui/react'
+
+import { SelectInput } from '../select-input/index.jsx'
 import { DictionaryInput } from '../dictionary-input/index.jsx'
 import { DatePickerInput } from '../datepicker-input/index.jsx'
 
@@ -47,7 +48,14 @@ const DynamicInput = ({
                     <Controller
                         name={technicalName}
                         control={control}
-                        render={({ field }) => <DatePickerInput {...field} />}
+                        render={({ field: { onChange, value, ...field } }) => (
+                            <DatePickerInput
+                                {...field}
+                                dateFormat="dd/MM/yyyy"
+                                value={value ? new Date(value) : null}
+                                onChange={(e) => onChange(new Date(e))}
+                            />
+                        )}
                     />
                 )
             case 'hidden':

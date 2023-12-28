@@ -22,7 +22,7 @@ export const EditRecordModal = ({ recordData, meta, isOpen, onClose, onSubmit })
     } = useForm()
 
     useEffect(() => {
-        reset(recordData)
+        reset(recordData[0])
     }, [recordData])
 
     const handleSubmitFormData = (data) => {

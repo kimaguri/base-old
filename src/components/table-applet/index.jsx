@@ -27,11 +27,12 @@ import { EditRecordModal } from './edit-record-modal/index.jsx'
 import Plate from '../plate/index.jsx'
 import { useAuth } from '../supabase-auth-provider/index.jsx'
 import { DrilldownModal } from './drilldown-modal/index.jsx'
+import { Shimmer } from '../shimmer/index.jsx'
 
 export const TableApplet = ({ meta, variant = 'simple' }) => {
     const { user } = useAuth()
 
-
+    const [isLoading, setIsLoading] = useState(true)
     const [rowSelection, setRowSelection] = useState({})
     const [data, setData] = useState([])
     const [isAddRecordModalOpen, setIsAddRecordModalOpen] = useState(false)
@@ -40,7 +41,7 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
     const lovs = useSelector((state) => state.app.lovs)
     const selectedRecordsIds = Object.keys(rowSelection)
     const firstSelectedRecordId = selectedRecordsIds[0]
-    const firstSelectedRecordData = data.find((record) => record.id === firstSelectedRecordId)
+    const firstSelectedRecordData = data.filter((record) => record.id === firstSelectedRecordId)
     const { tableName, foreignTables, columns, addRecord, editRecord } = meta || {}
     const isAddRecordAvailable = meta.addRecord
     const isDeleteRecordAvailable = firstSelectedRecordId && meta.deleteRecord?.disabled !== true
@@ -54,7 +55,14 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
     const getTableRowId = (row) => row.id
 
     const handleFetch = () => {
-        fetchData({ tableName, foreignTables }).then((data) => setData(data))
+        setIsLoading(true) // Start loading
+        fetchData({ tableName, foreignTables })
+            .then((data) => {
+                setData(data)
+            })
+            .finally(() => {
+                setIsLoading(false) // End loading
+            })
     }
 
     const handleAdd = () => {
@@ -80,12 +88,10 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
             tableName,
             recordId: firstSelectedRecordId,
             recordData: prepareEditData(editRecordData, editRecord?.fields)
-        }).then(
-            () => {
-                handleFetch()
-                setRowSelection({})
-            }
-        )
+        }).then(() => {
+            handleFetch()
+            setRowSelection({})
+        })
     }
 
     const handleDelete = () => {
@@ -115,7 +121,8 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                     <IndeterminateCheckbox
                         {...{
                             isChecked: table.getIsAllRowsSelected(),
-                            indeterminate: table.getIsSomeRowsSelected(),
+                            isIndeterminate:
+                                table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected(),
                             onChange: table.getToggleAllRowsSelectedHandler()
                         }}
                     />
@@ -125,7 +132,7 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                         {...{
                             isChecked: row.getIsSelected(),
                             disabled: !row.getCanSelect(),
-                            indeterminate: row.getIsSomeSelected(),
+                            isIndeterminate: row.getIsSomeSelected(),
                             onChange: row.getToggleSelectedHandler()
                         }}
                     />
@@ -155,6 +162,10 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
         },
         onRowSelectionChange: setRowSelection
     })
+
+    if (isLoading) {
+        return <Shimmer />
+    }
 
     return (
         <Plate>
