@@ -52,7 +52,7 @@ const DynamicInput = ({
                             <DatePickerInput
                                 {...field}
                                 dateFormat="dd/MM/yyyy"
-                                value={new Date(value)}
+                                value={value ? new Date(value) : null}
                                 onChange={(e) => onChange(new Date(e))}
                             />
                         )}
