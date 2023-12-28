@@ -9,7 +9,8 @@ import {
 
 const columnHelper = createColumnHelper()
 
-export const createColumns = (columns, lovs) => {
+export const createColumns = (columns, lovs, handlers = {}) => {
+    const { openDrilldown, setRowSelection } = handlers
     return columns
         .filter((column) => column.visible !== false)
         .map((col) =>
@@ -17,6 +18,10 @@ export const createColumns = (columns, lovs) => {
                 header: col.header,
                 type: col.type,
                 cell: (info) => {
+                    const drilldownClick = () => {
+                        setRowSelection({ [info.row.id] : true })
+                        openDrilldown()
+                    }
                     switch (col.type) {
                         case 'date':
                             return formatDate({ dateString: info.getValue(), formatString: RUS_DATE })
@@ -38,6 +43,10 @@ export const createColumns = (columns, lovs) => {
                                     .join('; ')
                                 : JSON.stringify(value)
                             return jsonValue
+                        case 'drilldown':
+                            return <a href="#" onClick={drilldownClick}>
+                                {info.getValue()}
+                            </a>
                         default:
                             return info.getValue()
                     }

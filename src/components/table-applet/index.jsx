@@ -16,7 +16,7 @@ import {
     Tr
 } from '@chakra-ui/react'
 
-import { createColumns, prepareAddData, prepareEditData } from './utils.js'
+import { createColumns, prepareAddData, prepareEditData } from './utils.jsx'
 import { FiSearch } from 'react-icons/fi'
 import { FaPen, FaPlus, FaTrashCan } from 'react-icons/fa6'
 import { IconButtonStyled } from './style.js'
@@ -26,14 +26,17 @@ import { AddRecordModal } from './add-record-modal/index.jsx'
 import { EditRecordModal } from './edit-record-modal/index.jsx'
 import Plate from '../plate/index.jsx'
 import { useAuth } from '../supabase-auth-provider/index.jsx'
+import { DrilldownModal } from './drilldown-modal/index.jsx'
 
 export const TableApplet = ({ meta, variant = 'simple' }) => {
     const { user } = useAuth()
+
 
     const [rowSelection, setRowSelection] = useState({})
     const [data, setData] = useState([])
     const [isAddRecordModalOpen, setIsAddRecordModalOpen] = useState(false)
     const [isEditRecordModalOpen, setIsEditRecordModalOpen] = useState(false)
+    const [isDrilldownModalOpen, setIsDrilldownModalOpen] = useState(false)
     const lovs = useSelector((state) => state.app.lovs)
     const selectedRecordsIds = Object.keys(rowSelection)
     const firstSelectedRecordId = selectedRecordsIds[0]
@@ -42,6 +45,7 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
     const isAddRecordAvailable = meta.addRecord
     const isDeleteRecordAvailable = firstSelectedRecordId && meta.deleteRecord?.disabled !== true
     const isEditRecordAvailable = firstSelectedRecordId && meta.editRecord
+    const isDrilldownAvailable = firstSelectedRecordId && meta.drilldown
 
     useEffect(() => {
         handleFetch()
@@ -94,6 +98,15 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
         })
     }
 
+    const openDrilldown = () => {
+        setIsDrilldownModalOpen(true)
+    }
+
+    const closeDrilldown = () => {
+        setIsDrilldownModalOpen(false)
+        setRowSelection({})
+    }
+
     const columnsArray = useMemo(
         () => [
             {
@@ -118,7 +131,14 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                     />
                 )
             },
-            ...createColumns(columns, lovs)
+            ...createColumns(
+                columns,
+                lovs,
+                {// TODO_TEMP handlers возможно стоит вынести в action/store
+                    openDrilldown,
+                    setRowSelection
+                }
+            )
         ],
         [columns, lovs]
     )
@@ -248,6 +268,15 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                     isOpen={isEditRecordModalOpen}
                     onClose={() => setIsEditRecordModalOpen(false)}
                     onSubmit={handleSubmitEdit}
+                />
+            )}
+            {isDrilldownAvailable && (
+                <DrilldownModal
+                    recordData={firstSelectedRecordData}
+                    meta={meta.drilldown}
+                    isOpen={isDrilldownModalOpen}
+                    onClose={closeDrilldown}
+                    onSubmit={() => {}}
                 />
             )}
         </Plate>

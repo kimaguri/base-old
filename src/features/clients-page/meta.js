@@ -4,7 +4,7 @@ export const meta = {
         {
             header: 'Клиент',
             accessor: 'full_name',
-            type: 'string'
+            type: 'drilldown'
         },
         {
             header: 'Тип',
@@ -143,6 +143,90 @@ export const meta = {
                 technicalName: 'comments',
                 type: 'text',
                 required: false
+            }
+        ]
+    },
+    drilldown: {
+        titleField: 'full_name',
+        type: 'tabs',
+        meta: [
+            {
+                id: 'lovTab',
+                title: 'Справочники',
+                type: 'table',
+                meta: {
+                    tableName: 'dictionary',
+                    columns: [
+                        {
+                            header: 'Наименование',
+                            accessor: 'name',
+                            type: 'string'
+                        },
+                        {
+                            header: 'Код',
+                            accessor: 'code',
+                            type: 'string'
+                        },
+                        {
+                            header: 'Значения',
+                            accessor: 'values_json',
+                            type: 'json'
+                        },
+                        {
+                            header: 'Комментарии',
+                            accessor: 'comments',
+                            type: 'string'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'orgTab',
+                title: 'Организации',
+                type: 'table',
+                meta: {
+                    tableName: 'organization',
+                    columns: [
+                        {
+                            header: 'Наименование',
+                            accessor: 'name',
+                            type: 'string'
+                        },
+                        {
+                            header: 'Комментарии',
+                            accessor: 'comments',
+                            type: 'string'
+                        }
+                    ],
+                    addRecord: {
+                        fields: [{
+                            label: 'Наименование',
+                            technicalName: 'name',
+                            type: 'text',
+                            required: true
+                        },
+                        {
+                            label: 'Комментарии',
+                            technicalName: 'comments',
+                            type: 'text',
+                            required: false
+                        }]
+                    },
+                    editRecord: {
+                        fields: [{
+                            label: 'Наименование',
+                            technicalName: 'name',
+                            type: 'text',
+                            required: true
+                        },
+                        {
+                            label: 'Комментарии',
+                            technicalName: 'comments',
+                            type: 'text',
+                            required: false
+                        }]
+                    }
+                }              
             }
         ]
     }
