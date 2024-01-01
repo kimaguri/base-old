@@ -5,7 +5,7 @@ export const meta = {
         {
             header: 'Наименование',
             accessor: 'name',
-            type: 'string'
+            type: 'drilldown'
         },
         {
             header: 'Организация',
@@ -100,5 +100,8 @@ export const meta = {
                 required: false
             }
         ]        
+    },
+    drilldown: {
+        titleField: 'name'
     }
 }

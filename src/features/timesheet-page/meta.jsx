@@ -95,11 +95,13 @@ export const tabsMeta = [
     {
         id: 'my_timesheets',
         title: 'Мои табели',
+        type: 'component',
         component: <TableApplet meta={tableMeta} />
     },
     {
         id: 'all_timesheets',
         title: 'Все табели',
+        type: 'component',
         component: <TableApplet meta={tableMeta} />
     }
 ]

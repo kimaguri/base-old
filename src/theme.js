@@ -13,6 +13,10 @@ export const theme = extendTheme({
             body: {
                 padding: 0,
                 margin: 0
+            },
+            a: {
+                color: '#646cff',
+                fontWeight: 400
             }
 
             // Add other global styles or resets

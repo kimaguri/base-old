@@ -58,9 +58,8 @@ const DynamicInput = ({
                         )}
                     />
                 )
-
             case 'hidden':
-                return null
+                return null   
             default:
                 return <Input type="text" {...control.register(technicalName)} size="lg" />
         }

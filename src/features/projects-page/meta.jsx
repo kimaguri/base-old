@@ -42,11 +42,13 @@ export const tabsMeta = [
     {
         id: 'my_projects',
         title: 'Мои проекты',
+        type: 'component',
         component: <TableApplet meta={tableMeta} />
     },
     {
         id: 'all_projects',
         title: 'Все проекты',
+        type: 'component',
         component: <TableApplet meta={tableMeta} />
     }
 ]
