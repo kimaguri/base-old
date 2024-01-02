@@ -19,10 +19,10 @@ export const LoginPage = () => {
     const { user, signIn } = useAuth()
 
     useEffect(() => {
-        if (user) {
+        if (user?.user_id) {
             navigate('/')
         }
-    }, [user])
+    }, [navigate, user?.user_id])
 
     const handleLogin = () => {
         signIn().then(() => navigate('/'))
