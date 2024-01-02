@@ -295,7 +295,7 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                     Last
                 </Button>
                 <Select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
-                    {[5, 10, 20, 30, 50].map((size) => (
+                    {[10, 20, 30, 50].map((size) => (
                         <option key={size} value={size}>
                             {size}
                         </option>
@@ -303,32 +303,28 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                 </Select>
             </Flex>
 
-            {isAddRecordAvailable && (
-                <AddRecordModal
-                    meta={meta.addRecord}
-                    isOpen={isAddRecordModalOpen}
-                    onClose={() => setIsAddRecordModalOpen(false)}
-                    onSubmit={handleSubmitAdd}
-                />
-            )}
-            {isEditRecordAvailable && (
-                <EditRecordModal
-                    recordData={firstSelectedRecordData}
-                    meta={meta.editRecord}
-                    isOpen={isEditRecordModalOpen}
-                    onClose={() => setIsEditRecordModalOpen(false)}
-                    onSubmit={handleSubmitEdit}
-                />
-            )}
-            {isDrilldownAvailable && (
-                <DrilldownModal
-                    recordData={firstSelectedRecordData}
-                    meta={meta.drilldown}
-                    isOpen={isDrilldownModalOpen}
-                    onClose={closeDrilldown}
-                    onSubmit={() => {}}
-                />
-            )}
+            <AddRecordModal
+                meta={meta.addRecord}
+                isOpen={isAddRecordModalOpen}
+                onClose={() => setIsAddRecordModalOpen(false)}
+                onSubmit={handleSubmitAdd}
+            />
+
+            <EditRecordModal
+                recordData={firstSelectedRecordData}
+                meta={meta.editRecord}
+                isOpen={isEditRecordModalOpen}
+                onClose={() => setIsEditRecordModalOpen(false)}
+                onSubmit={handleSubmitEdit}
+            />
+
+            <DrilldownModal
+                recordData={firstSelectedRecordData}
+                meta={meta.drilldown}
+                isOpen={isDrilldownModalOpen}
+                onClose={closeDrilldown}
+                onSubmit={() => {}}
+            />
         </Plate>
     )
 }
