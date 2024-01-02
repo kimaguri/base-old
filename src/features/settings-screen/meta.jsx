@@ -1,6 +1,6 @@
-import { OrganizationsPage } from '../organizations-page/index.jsx'
-import { CalcModelsPage } from '../calc-models-page/index.jsx'
-import { DictionariesPage } from '../dictionaries-page/index.jsx'
+import { OrganizationsPage } from './pages/organizations-page/index.jsx'
+import { CalcModelsPage } from './pages/calc-models-page/index.jsx'
+import { DictionariesPage } from './pages/dictionaries-page/index.jsx'
 
 export const meta = [
     {

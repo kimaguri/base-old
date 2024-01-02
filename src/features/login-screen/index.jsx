@@ -14,7 +14,7 @@ import {
 import { useAuth } from '../../components/supabase-auth-provider/index.jsx'
 import { useEffect } from 'react'
 
-export const LoginPage = () => {
+export const LoginScreen = () => {
     const navigate = useNavigate()
     const { user, signIn } = useAuth()
 
