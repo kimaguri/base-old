@@ -6,7 +6,7 @@ const MenuBar = ({ children }) => {
     return (
         <VStack display="flex" flexDirection="column" bg="white" justifyContent="space-between">
             <IconButton icon={<FaBarsStaggered />} aria-label="profile" mt={9} />
-            <VStack minW={100} spacing={8} marginTop={'36px'} marginBottom={'auto'}>
+            <VStack minW={100} spacing={8}>
                 {children}
             </VStack>
             <Avatar bg="gray.300" icon={<AiOutlineUser fontSize="1.5rem" />} mb={9} />

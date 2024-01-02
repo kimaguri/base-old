@@ -138,14 +138,11 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                     />
                 )
             },
-            ...createColumns(
-                columns,
-                lovs,
-                {// TODO_TEMP handlers возможно стоит вынести в action/store
-                    openDrilldown,
-                    setRowSelection
-                }
-            )
+            ...createColumns(columns, lovs, {
+                // TODO TEMP handlers возможно стоит вынести в action/store
+                openDrilldown,
+                setRowSelection
+            })
         ],
         [columns, lovs]
     )
