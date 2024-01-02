@@ -1,6 +1,29 @@
 import { supabase } from '../components/supabase-auth-provider/index.jsx'
 
-export const fetchData = async ({
+export const fetchData = async ({ tableName, foreignTables = [], filter, order }) => {
+    let selectQuery = '*'
+
+    if (foreignTables.length > 0) {
+        const foreignTablesQuery = foreignTables.map((table) => `${table}(*)`).join(',')
+        selectQuery = `*, ${foreignTablesQuery}`
+    }
+
+    const { data, error } = await supabase
+        .from(tableName)
+        .select(selectQuery)
+        .filter(filter?.column || '', filter?.operator || '', filter?.value || '')
+        .order(order?.column || 'created_at', { ascending: order?.ascending || false })
+
+    if (error) {
+        console.error('Error fetching data:', error)
+
+        return
+    }
+
+    return data
+}
+
+export const fetchPaginatedData = async ({
     tableName,
     foreignTables = [],
     filter,

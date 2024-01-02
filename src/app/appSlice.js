@@ -2,21 +2,21 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { fetchData } from './supabase.js'
 import { handleAsyncThunkStates } from '../utils/index.js'
 
-export const fetchDictionaries = createAsyncThunk(
-    'form/fetchDictionaries',
-    async () => {
-        const dictionaryData = await fetchData({
-            tableName: 'dictionary'
-        })
+export const fetchDictionaries = createAsyncThunk('form/fetchDictionaries', async () => {
+    const dictionaryData = await fetchData({
+        tableName: 'dictionary'
+    })
 
-        return {
-            data: dictionaryData?.reduce((result, item) => ({
+    return {
+        data: dictionaryData.reduce(
+            (result, item) => ({
                 ...result,
                 [item.code]: item.values_json
-            }), {})
-        }
+            }),
+            {}
+        )
     }
-)
+})
 
 export const fetchDictionaryOptions = createAsyncThunk(
     'form/fetchDictionaryOptions',

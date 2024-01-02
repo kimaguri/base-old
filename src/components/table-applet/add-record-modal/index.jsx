@@ -20,6 +20,8 @@ export const AddRecordModal = ({ meta, isOpen, onClose, onSubmit }) => {
         formState: { errors }
     } = useForm()
 
+    const { title, fields } = meta || {}
+
     const handleSubmitFormData = (data) => {
         onSubmit(data)
         reset()
@@ -30,12 +32,12 @@ export const AddRecordModal = ({ meta, isOpen, onClose, onSubmit }) => {
         <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader mb={25}>{meta.title || 'Новая запись'}</ModalHeader>
+                <ModalHeader mb={25}>{title || 'Новая запись'}</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit(handleSubmitFormData)}>
                     <ModalBody>
                         <FormApplet
-                            meta={meta.fields}
+                            meta={fields}
                             control={control}
                             setValue={setValue}
                             errors={errors}

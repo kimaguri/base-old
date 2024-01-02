@@ -21,8 +21,12 @@ export const EditRecordModal = ({ recordData, meta, isOpen, onClose, onSubmit })
         formState: { errors }
     } = useForm()
 
+    const { title, fields } = meta || {}
+
     useEffect(() => {
-        reset(recordData[0])
+        if (recordData) {
+            reset(recordData[0])
+        }
     }, [recordData])
 
     const handleSubmitFormData = (data) => {
@@ -38,12 +42,12 @@ export const EditRecordModal = ({ recordData, meta, isOpen, onClose, onSubmit })
         <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader mb={25}>{meta.title || 'Редактирование записи'}</ModalHeader>
+                <ModalHeader mb={25}>{title || 'Редактирование записи'}</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit(handleSubmitFormData)}>
                     <ModalBody>
                         <FormApplet
-                            meta={meta.fields}
+                            meta={fields}
                             control={control}
                             setValue={setValue}
                             errors={errors}
