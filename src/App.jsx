@@ -3,14 +3,14 @@ import { useDispatch } from 'react-redux'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { fetchDictionaries } from './app/appSlice.js'
 
-import { LoginPage } from './features/login-page'
+import { LoginScreen } from './features/login-screen'
 import { useAuth } from './components/supabase-auth-provider'
 import { PageLayout } from './components/page-layout/index.jsx'
-import { ProjectsPage } from './features/projects-page/index.jsx'
-import { FinReportsPage } from './features/fin-reports-page/index.jsx'
-import { SettingsPage } from './features/settings-page/index.jsx'
-import { TimesheetPage } from './features/timesheet-page/index.jsx'
-import { ClientsPage } from './features/clients-page/index.jsx'
+import { ProjectsScreen } from './features/projects-screen/index.jsx'
+import { FinReportsScreen } from './features/fin-reports-screen/index.jsx'
+import { SettingsScreen } from './features/settings-screen/index.jsx'
+import { TimesheetScreen } from './features/timesheet-screen/index.jsx'
+import { ClientsScreen } from './features/clients-screen/index.jsx'
 
 import './App.css'
 
@@ -31,11 +31,11 @@ const AuthenticatedRoutes = () => {
     return (
         <PageLayout>
             <Routes>
-                <Route path="/clients" element={<ClientsPage />} />
-                <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/timesheet" element={<TimesheetPage />} />
-                <Route path="/fin-reports" element={<FinReportsPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/clients" element={<ClientsScreen />} />
+                <Route path="/projects" element={<ProjectsScreen />} />
+                <Route path="/timesheet" element={<TimesheetScreen />} />
+                <Route path="/fin-reports" element={<FinReportsScreen />} />
+                <Route path="/settings" element={<SettingsScreen />} />
             </Routes>
         </PageLayout>
     )
@@ -54,7 +54,7 @@ export const App = () => {
 
     return (
         <Routes>
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<LoginScreen />} />
             <Route
                 path="/*"
                 element={
