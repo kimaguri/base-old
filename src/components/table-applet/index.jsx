@@ -52,7 +52,6 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
     const isAddRecordAvailable = meta.addRecord
     const isDeleteRecordAvailable = firstSelectedRecordId && meta.deleteRecord?.disabled !== true
     const isEditRecordAvailable = firstSelectedRecordId && meta.editRecord
-    const isDrilldownAvailable = firstSelectedRecordId && meta.drilldown
 
     useEffect(() => {
         handleFetch()
@@ -320,7 +319,7 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
 
             <DrilldownModal
                 recordData={firstSelectedRecordData}
-                meta={meta.drilldown}
+                drilldownMeta={meta.drilldown}
                 isOpen={isDrilldownModalOpen}
                 onClose={closeDrilldown}
                 onSubmit={() => {}}

@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import {
-    Button,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -13,7 +12,7 @@ import { useForm } from 'react-hook-form'
 import { FormApplet } from '../../form/components/index.jsx'
 import Tabs from '../../tabs/index.jsx'
 
-export const DrilldownModal = ({ recordData, meta, isOpen, onClose, onSubmit }) => {
+export const DrilldownModal = ({ recordData, drilldownMeta, isOpen, onClose, onSubmit }) => {
     const {
         control,
         setValue,
@@ -21,6 +20,8 @@ export const DrilldownModal = ({ recordData, meta, isOpen, onClose, onSubmit }) 
         reset,
         formState: { errors }
     } = useForm()
+
+    const { titleField, type, meta } = drilldownMeta || {}
 
     const handleSubmitFormData = (data) => {
         onSubmit(data)
@@ -32,21 +33,16 @@ export const DrilldownModal = ({ recordData, meta, isOpen, onClose, onSubmit }) 
         reset(recordData)
     }, [recordData])
 
-    const titleText = meta.titleField
-        ? recordData[meta.titleField]
-        : 'Детальная информация'
+    const titleText = titleField ? recordData[titleField] : 'Детальная информация'
 
     const getContent = () => {
-        switch (meta.type) {
+        switch (type) {
             case 'tabs':
-                return <Tabs meta={meta.meta} />
+                return <Tabs meta={meta} />
             case 'form':
-                return <FormApplet
-                    meta={meta.meta}
-                    control={control}
-                    setValue={setValue}
-                    errors={errors}
-                />
+                return (
+                    <FormApplet meta={meta} control={control} setValue={setValue} errors={errors} />
+                )
             default:
                 return null
         }
@@ -59,9 +55,7 @@ export const DrilldownModal = ({ recordData, meta, isOpen, onClose, onSubmit }) 
                 <ModalHeader mb={25}>{titleText}</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit(handleSubmitFormData)}>
-                    <ModalBody>
-                        {getContent()}
-                    </ModalBody>
+                    <ModalBody>{getContent()}</ModalBody>
                     <ModalFooter gap={5}>
                         {/*<Button type="submit" colorScheme="teal">
                             Закрыть
