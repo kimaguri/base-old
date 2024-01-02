@@ -1,6 +1,13 @@
 import { supabase } from '../components/supabase-auth-provider/index.jsx'
 
-export const fetchData = async ({ tableName, foreignTables = [], filter, order }) => {
+export const fetchData = async ({
+    tableName,
+    foreignTables = [],
+    filter,
+    order,
+    pageIndex = 0,
+    pageSize = 10
+}) => {
     let selectQuery = '*'
 
     if (foreignTables.length > 0) {
@@ -8,19 +15,23 @@ export const fetchData = async ({ tableName, foreignTables = [], filter, order }
         selectQuery = `*, ${foreignTablesQuery}`
     }
 
-    const { data, error } = await supabase
+    const startIndex = pageIndex * pageSize
+    const endIndex = startIndex + pageSize - 1
+
+    const { data, error, count } = await supabase
         .from(tableName)
-        .select(selectQuery)
+        .select(selectQuery, { count: 'exact' })
+        .range(startIndex, endIndex)
         .filter(filter?.column || '', filter?.operator || '', filter?.value || '')
         .order(order?.column || 'created_at', { ascending: order?.ascending || false })
 
     if (error) {
         console.error('Error fetching data:', error)
 
-        return
+        return { data: null, error, count: 0 }
     }
 
-    return data
+    return { data, count }
 }
 
 export const insertRecord = async ({ tableName, recordData }) => {
