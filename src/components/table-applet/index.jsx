@@ -3,10 +3,12 @@ import { useSelector } from 'react-redux'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import {
     Box,
+    Button,
     Flex,
     Input,
     InputGroup,
     InputLeftElement,
+    Select,
     Table,
     TableContainer,
     Tbody,
@@ -34,6 +36,10 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [rowSelection, setRowSelection] = useState({})
+    const [pageIndex, setPageIndex] = useState(0) // Current page index
+    const [pageSize, setPageSize] = useState(10) // Number of records per page
+    const [pageCount, setPageCount] = useState(0) // Total number of pages
+
     const [data, setData] = useState([])
     const [isAddRecordModalOpen, setIsAddRecordModalOpen] = useState(false)
     const [isEditRecordModalOpen, setIsEditRecordModalOpen] = useState(false)
@@ -50,18 +56,24 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
 
     useEffect(() => {
         handleFetch()
-    }, [])
+    }, [pageIndex, pageSize])
 
     const getTableRowId = (row) => row.id
 
     const handleFetch = () => {
-        setIsLoading(true) // Start loading
-        fetchData({ tableName, foreignTables })
-            .then((data) => {
+        setIsLoading(true)
+        fetchData({
+            tableName,
+            foreignTables,
+            pageIndex,
+            pageSize
+        })
+            .then(({ data, count }) => {
                 setData(data)
+                setPageCount(Math.ceil(count / pageSize))
             })
             .finally(() => {
-                setIsLoading(false) // End loading
+                setIsLoading(false)
             })
     }
 
@@ -260,6 +272,36 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                     </Table>
                 </Flex>
             </TableContainer>
+            <Flex justifyContent="space-between" p={4}>
+                <Button onClick={() => setPageIndex(0)} disabled={pageIndex === 0}>
+                    First
+                </Button>
+                <Button
+                    onClick={() => setPageIndex((old) => Math.max(old - 1, 0))}
+                    disabled={pageIndex === 0}
+                >
+                    Previous
+                </Button>
+                <Button
+                    onClick={() => setPageIndex((old) => Math.min(old + 1, pageCount - 1))}
+                    disabled={pageIndex === pageCount - 1}
+                >
+                    Next
+                </Button>
+                <Button
+                    onClick={() => setPageIndex(pageCount - 1)}
+                    disabled={pageIndex === pageCount - 1}
+                >
+                    Last
+                </Button>
+                <Select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+                    {[5, 10, 20, 30, 50].map((size) => (
+                        <option key={size} value={size}>
+                            {size}
+                        </option>
+                    ))}
+                </Select>
+            </Flex>
 
             {isAddRecordAvailable && (
                 <AddRecordModal
