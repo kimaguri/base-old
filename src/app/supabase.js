@@ -1,15 +1,16 @@
 import { supabase } from '../components/supabase-auth-provider/index.jsx'
 
-export const fetchData = async ({ tableName, foreignTables, filter, order }) => {
+export const fetchData = async ({ tableName, foreignTables = [], filter, order }) => {
+    let selectQuery = '*'
+
+    if (foreignTables.length > 0) {
+        const foreignTablesQuery = foreignTables.map((table) => `${table}(*)`).join(',')
+        selectQuery = `*, ${foreignTablesQuery}`
+    }
+
     const { data, error } = await supabase
         .from(tableName)
-        .select(`
-            *
-            ${foreignTables
-                ? foreignTables.map((item) => `,${item}(*)`)
-                : ''
-            }
-        `)
+        .select(selectQuery)
         .filter(filter?.column || '', filter?.operator || '', filter?.value || '')
         .order(order?.column || 'created_at', { ascending: order?.ascending || false })
 
@@ -35,9 +36,7 @@ export const insertRecord = async ({ tableName, recordData }) => {
 }
 
 export const modifyRecord = async ({ tableName, recordData, recordId }) => {
-    const { error } = await supabase.from(tableName)
-        .update(recordData)
-        .eq('id', recordId)
+    const { error } = await supabase.from(tableName).update(recordData).eq('id', recordId)
 
     if (error) {
         console.error('Error modifing data:', error)
@@ -45,9 +44,7 @@ export const modifyRecord = async ({ tableName, recordData, recordId }) => {
 }
 
 export const deleteRecord = async ({ tableName, recordId }) => {
-    const { error } = await supabase.from(tableName)
-        .delete()
-        .eq('id', recordId)
+    const { error } = await supabase.from(tableName).delete().eq('id', recordId)
 
     if (error) {
         console.error('Error deleting data:', error)

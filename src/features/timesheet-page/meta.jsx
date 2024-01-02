@@ -2,7 +2,7 @@ import { TableApplet } from '../../components/table-applet/index.jsx'
 
 export const tableMeta = {
     tableName: 'timesheet',
-    foreignTables: ['dev_projects'],
+    foreignTables: ['dev_projects', 'employee'],
     columns: [
         {
             accessor: 'id',
@@ -31,7 +31,7 @@ export const tableMeta = {
         },
         {
             header: 'Сотрудник',
-            accessor: 'employee_id',
+            accessor: 'employee.full_name',
             type: 'string'
         }
     ],
