@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import {
-    Button,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -25,7 +24,10 @@ export const DrilldownModal = ({ recordData, meta, isOpen, onClose, onSubmit }) 
     const handleSubmitFormData = (data) => {
         onSubmit(data)
         reset()
-        onClose()
+    }
+
+    const handleCancel = () => {
+        reset(recordData)
     }
 
     useEffect(() => {
@@ -39,7 +41,15 @@ export const DrilldownModal = ({ recordData, meta, isOpen, onClose, onSubmit }) 
     const getContent = () => {
         switch (meta.type) {
             case 'tabs':
-                return <Tabs meta={meta.meta} />
+                return <Tabs
+                    meta={meta.meta}
+                    //onSubmit={handleSubmit(handleSubmitFormData)}
+                    handleSubmit={handleSubmit}
+                    onCancel={handleCancel}
+                    control={control}
+                    setValue={setValue}
+                    errors={errors}
+                />
             case 'form':
                 return <FormApplet
                     meta={meta.meta}

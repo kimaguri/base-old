@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import {
     Box,
@@ -28,9 +28,11 @@ import Plate from '../plate/index.jsx'
 import { useAuth } from '../supabase-auth-provider/index.jsx'
 import { DrilldownModal } from './drilldown-modal/index.jsx'
 import { Shimmer } from '../shimmer/index.jsx'
+import { actions } from '../../app/appSlice'
 
 export const TableApplet = ({ meta, variant = 'simple' }) => {
     const { user } = useAuth()
+    const dispatch = useDispatch()
 
     const [isLoading, setIsLoading] = useState(true)
     const [rowSelection, setRowSelection] = useState({})
@@ -41,12 +43,19 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
     const lovs = useSelector((state) => state.app.lovs)
     const selectedRecordsIds = Object.keys(rowSelection)
     const firstSelectedRecordId = selectedRecordsIds[0]
-    const firstSelectedRecordData = data.filter((record) => record.id === firstSelectedRecordId)
-    const { tableName, foreignTables, columns, addRecord, editRecord } = meta || {}
+    const firstSelectedRecordData = data.find((record) => record.id === firstSelectedRecordId)
+    const { tableName, foreignTables, columns, parentEntityName, parentField, addRecord, editRecord } = meta || {}
     const isAddRecordAvailable = meta.addRecord
     const isDeleteRecordAvailable = firstSelectedRecordId && meta.deleteRecord?.disabled !== true
     const isEditRecordAvailable = firstSelectedRecordId && meta.editRecord
     const isDrilldownAvailable = firstSelectedRecordId && meta.drilldown
+    const parentRecordId = useSelector((state) => state.app.cursors[parentEntityName])
+    const parentFilter = {
+        column: parentField,
+        operator: 'eq',
+        value: parentRecordId
+    }
+    const filter = parentRecordId ? parentFilter : undefined
 
     useEffect(() => {
         handleFetch()
@@ -56,7 +65,11 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
 
     const handleFetch = () => {
         setIsLoading(true) // Start loading
-        fetchData({ tableName, foreignTables })
+        fetchData({
+            tableName,
+            foreignTables,
+            filter
+        })
             .then((data) => {
                 setData(data)
             })
@@ -79,7 +92,17 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
     const handleSubmitAdd = (newRecordData) => {
         insertRecord({
             tableName,
-            recordData: prepareAddData(newRecordData, addRecord?.fields, { user })
+            recordData: prepareAddData(
+                newRecordData,
+                addRecord?.fields,
+                {
+                    user,
+                    parent: parentRecordId
+                        ? {
+                            id: parentRecordId
+                        }
+                        : null
+                })
         }).then(handleFetch)
     }
 
@@ -111,6 +134,18 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
     const closeDrilldown = () => {
         setIsDrilldownModalOpen(false)
         setRowSelection({})
+        dispatch(actions.removeCursor({
+            entityName: tableName
+        }))
+    }
+
+    const drilldownClick = (rowId) => {
+        setRowSelection({ [rowId] : true })
+        dispatch(actions.setCursor({// TODO_TEMP дублирование логики с activeRecordId в store
+            entityName: tableName,
+            cursor: rowId
+        }))
+        openDrilldown()
     }
 
     const columnsArray = useMemo(
@@ -143,7 +178,8 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                 lovs,
                 {// TODO_TEMP handlers возможно стоит вынести в action/store
                     openDrilldown,
-                    setRowSelection
+                    setRowSelection,
+                    drilldownClick
                 }
             )
         ],
@@ -287,7 +323,7 @@ export const TableApplet = ({ meta, variant = 'simple' }) => {
                     meta={meta.drilldown}
                     isOpen={isDrilldownModalOpen}
                     onClose={closeDrilldown}
-                    onSubmit={() => {}}
+                    onSubmit={handleSubmitEdit}
                 />
             )}
         </Plate>

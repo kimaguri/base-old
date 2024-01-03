@@ -151,46 +151,75 @@ export const meta = {
         type: 'tabs',
         meta: [
             {
-                id: 'lovTab',
-                title: 'Справочники',
-                type: 'table',
-                meta: {
-                    tableName: 'dictionary',
-                    columns: [
-                        {
-                            header: 'Наименование',
-                            accessor: 'name',
-                            type: 'string'
-                        },
-                        {
-                            header: 'Код',
-                            accessor: 'code',
-                            type: 'string'
-                        },
-                        {
-                            header: 'Значения',
-                            accessor: 'values_json',
-                            type: 'json'
-                        },
-                        {
-                            header: 'Комментарии',
-                            accessor: 'comments',
-                            type: 'string'
-                        }
-                    ]
-                }
+                id: 'baseInfoTab',
+                title: 'Базовая информация',
+                type: 'form',
+                meta: [
+                    {
+                        label: 'ФИО/Название компании',
+                        technicalName: 'full_name',
+                        type: 'text',
+                        required: true
+                    },
+                    {
+                        label: 'Тип клиента',
+                        technicalName: 'type',
+                        type: 'dictionary',
+                        dictionaryName: 'client_type',
+                        required: true
+                    },
+                    {
+                        label: 'Дата рождения',
+                        technicalName: 'birth_date',
+                        type: 'date',
+                        required: false
+                    },
+                    {
+                        label: 'ИИН/БИН',
+                        technicalName: 'iin_bin',
+                        type: 'text',
+                        required: false
+                    },
+                    {
+                        label: 'Статус',
+                        technicalName: 'status',
+                        type: 'dictionary',
+                        dictionaryName: 'client_status',
+                        required: true
+                    },
+                    {
+                        label: 'Комментарии',
+                        technicalName: 'comments',
+                        type: 'text',
+                        required: false
+                    }
+                ]
             },
             {
-                id: 'orgTab',
-                title: 'Организации',
+                id: 'contactInfoTab',
+                title: 'Контактная информация',
                 type: 'table',
                 meta: {
-                    tableName: 'organization',
+                    tableName: 'contact_info',
+                    parentEntityName: 'client',
+                    parentField: 'client_id',
                     columns: [
                         {
-                            header: 'Наименование',
-                            accessor: 'name',
+                            header: 'Тип',
+                            accessor: 'type',
+                            type: 'dictionary',
+                            dictionaryName: 'contact_info_type'
+                        },
+                        {
+                            header: 'Значение',
+                            accessor: 'value',
                             type: 'string'
+                        },
+                        {
+                            header: 'Статус',
+                            accessor: 'status',
+                            type: 'dictionary',
+                            dictionaryName: 'contact_info_status'
                         },
                         {
                             header: 'Комментарии',
@@ -200,9 +229,23 @@ export const meta = {
                     ],
                     addRecord: {
                         fields: [{
-                            label: 'Наименование',
-                            technicalName: 'name',
+                            label: 'Тип',
+                            technicalName: 'type',
+                            type: 'dictionary',
+                            dictionaryName: 'contact_info_type',
+                            required: true
+                        },
+                        {
+                            label: 'Значение',
+                            technicalName: 'value',
                             type: 'text',
+                            required: true
+                        },
+                        {
+                            label: 'Статус',
+                            technicalName: 'status',
+                            type: 'dictionary',
+                            dictionaryName: 'contact_info_status',
                             required: true
                         },
                         {
@@ -210,22 +253,75 @@ export const meta = {
                             technicalName: 'comments',
                             type: 'text',
                             required: false
-                        }]
-                    },
-                    editRecord: {
-                        fields: [{
-                            label: 'Наименование',
-                            technicalName: 'name',
-                            type: 'text',
-                            required: true
                         },
                         {
-                            label: 'Комментарии',
-                            technicalName: 'comments',
-                            type: 'text',
-                            required: false
+                            label: 'Клиент',
+                            technicalName: 'client_id',
+                            type: 'hidden',
+                            predefault: 'parentId'
                         }]
                     }
+                }
+            },
+            {
+                id: 'addressTab',
+                title: 'Адреса',
+                type: 'table',
+                meta: {
+                    tableName: 'address',
+                    parentEntityName: 'client',
+                    parentField: 'client_id',
+                    columns: [
+                        {
+                            header: 'Тип',
+                            accessor: 'type',
+                            type: 'dictionary',
+                            dictionaryName: 'address_type'
+                        },
+                        {
+                            header: 'Страна',
+                            accessor: 'country',
+                            type: 'dictionary',
+                            dictionaryName: 'country'
+                        },
+                        {
+                            header: 'Город',
+                            accessor: 'city',
+                            type: 'dictionary',
+                            dictionaryName: 'city'
+                        },
+                        {
+                            header: 'Адресная строка',
+                            accessor: 'address_line',
+                            type: 'string'
+                        },
+                        {
+                            header: 'Статус',
+                            accessor: 'status',
+                            type: 'dictionary',
+                            dictionaryName: 'address_status'
+                        },
+                        {
+                            header: 'Комментарии',
+                            accessor: 'comments',
+                            type: 'string'
+                        }
+                    ]
+                }              
+            },
+            {
+                id: 'projectsTab',
+                title: 'Проекты',
+                type: 'table',
+                meta: {
+                    tableName: 'dev_projects',
+                    columns: [
+                        {
+                            header: 'Наименование',
+                            accessor: 'name',
+                            type: 'string'
+                        }
+                    ]
                 }              
             }
         ]

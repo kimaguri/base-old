@@ -40,10 +40,16 @@ export const fetchDictionaryOptions = createAsyncThunk(
 export const appSlice = createSlice({
     name: 'appSlice',
     initialState: {
-        lovs: undefined
+        lovs: undefined,
+        cursors: {}
     },
     reducers: {
-        // reducers
+        setCursor: (state, action) => {
+            state.cursors[action.payload.entityName] = action.payload.cursor
+        },
+        removeCursor: (state, action) => {
+            delete state.cursors[action.payload.entityName]
+        }
     },
     extraReducers: (builder) => {
         builder.addMatcher(handleAsyncThunkStates(fetchDictionaryOptions), (state, action) => {
